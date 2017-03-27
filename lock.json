@@ -1,0 +1,270 @@
+{
+    "memo": "ce0b50dfbe275604bb75fac604fe87aca3eb38969d66739d8c21e9d2c3174a5f",
+    "projects": [
+        {
+            "name": "github.com/armon/go-radix",
+            "branch": "master",
+            "revision": "4239b77079c7b5d1243b7b4736304ce8ddb6f0f2",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/bgentry/speakeasy",
+            "branch": "master",
+            "revision": "675b82c74c0ed12283ee81ba8a534c8982c07b85",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/davecgh/go-spew",
+            "version": "v1.1.0",
+            "revision": "346938d642f2ec3594ed81d874461961cd0faa76",
+            "packages": [
+                "spew"
+            ]
+        },
+        {
+            "name": "github.com/dgrijalva/jwt-go",
+            "branch": "master",
+            "revision": "2268707a8f0843315e2004ee4f1d021dc08baedf",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/go-pg/pg",
+            "version": "v6.0.0",
+            "revision": "e8d4cc8264796f383c96909ba1be6ae9677fa2b6",
+            "packages": [
+                ".",
+                "internal",
+                "internal/parser",
+                "internal/pool",
+                "orm",
+                "types"
+            ]
+        },
+        {
+            "name": "github.com/google/uuid",
+            "branch": "master",
+            "revision": "6a5e28554805e78ea6141142aba763936c4761c0",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/gorilla/websocket",
+            "branch": "master",
+            "revision": "a91eba7f97777409bc2c443f5534d41dd20c5720",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/hashicorp/consul",
+            "branch": "master",
+            "revision": "523c0c54fec686d1331f628b0fe7cd15a1a23d50",
+            "packages": [
+                "api"
+            ]
+        },
+        {
+            "name": "github.com/hashicorp/errwrap",
+            "branch": "master",
+            "revision": "7554cd9344cec97297fa6649b055a8c98c2a1e55",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/hashicorp/go-cleanhttp",
+            "branch": "master",
+            "revision": "3573b8b52aa7b37b9358d966a898feb387f62437",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/hashicorp/go-multierror",
+            "branch": "master",
+            "revision": "ed905158d87462226a13fe39ddf685ea65f1c11f",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/hashicorp/hcl",
+            "branch": "master",
+            "revision": "630949a3c5fa3c613328e1b8256052cbc2327c9b",
+            "packages": [
+                ".",
+                "hcl/ast",
+                "hcl/parser",
+                "hcl/scanner",
+                "hcl/strconv",
+                "hcl/token",
+                "json/parser",
+                "json/scanner",
+                "json/token"
+            ]
+        },
+        {
+            "name": "github.com/hashicorp/serf",
+            "version": "v0.8.1",
+            "revision": "d6574a5bb1226678d7010325fb6c985db20ee458",
+            "packages": [
+                "coordinate"
+            ]
+        },
+        {
+            "name": "github.com/jinzhu/inflection",
+            "branch": "master",
+            "revision": "1c35d901db3da928c72a72d8458480cc9ade058f",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/jmcvetta/randutil",
+            "branch": "master",
+            "revision": "2bb1b664bcff821e02b2a0644cd29c7e824d54f8",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/labstack/echo",
+            "branch": "master",
+            "revision": "22012e0e9da962b1b6a67b9e009d8eabe35d2d7e",
+            "packages": [
+                ".",
+                "middleware"
+            ]
+        },
+        {
+            "name": "github.com/labstack/gommon",
+            "version": "v0.2.0",
+            "revision": "9cedb429ffbe71a32a3ae7c65fd109cb7ae07804",
+            "packages": [
+                "bytes",
+                "color",
+                "log",
+                "random"
+            ]
+        },
+        {
+            "name": "github.com/lxc/lxd",
+            "branch": "master",
+            "revision": "7cb845b189c9c67fbb3ebb9dd9bb6088d0612f91",
+            "packages": [
+                ".",
+                "shared",
+                "shared/api",
+                "shared/ioprogress",
+                "shared/osarch",
+                "shared/simplestreams",
+                "shared/version"
+            ]
+        },
+        {
+            "name": "github.com/mattn/go-colorable",
+            "version": "v0.0.7",
+            "revision": "d228849504861217f796da67fae4f6e347643f15",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/mattn/go-isatty",
+            "version": "v0.0.1",
+            "revision": "3a115632dcd687f9c8cd01679c83a06a0e21c1f3",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/mitchellh/cli",
+            "branch": "master",
+            "revision": "8d6d9ab3c912dcb005ece87c40a41b9e73e1999a",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/mitchellh/mapstructure",
+            "branch": "master",
+            "revision": "53818660ed4955e899c0bcafa97299a388bd7c8e",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/pmezard/go-difflib",
+            "version": "v1.0.0",
+            "revision": "792786c7400a136282c1664665ae0a8db921c6c2",
+            "packages": [
+                "difflib"
+            ]
+        },
+        {
+            "name": "github.com/stretchr/testify",
+            "branch": "master",
+            "revision": "4d4bfba8f1d1027c4fdbe371823030df51419987",
+            "packages": [
+                "assert"
+            ]
+        },
+        {
+            "name": "github.com/valyala/bytebufferpool",
+            "branch": "master",
+            "revision": "e746df99fe4a3986f4d4f79e13c1e0117ce9c2f7",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/valyala/fasttemplate",
+            "branch": "master",
+            "revision": "dcecefd839c4193db0d35b88ec65b4c12d360ab0",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "golang.org/x/crypto",
+            "branch": "master",
+            "revision": "453249f01cfeb54c3d549ddb75ff152ca243f9d8",
+            "packages": [
+                "acme",
+                "acme/autocert"
+            ]
+        },
+        {
+            "name": "golang.org/x/net",
+            "branch": "master",
+            "revision": "6c23252515492caf9b228a9d5cabcdbde29f7f82",
+            "packages": [
+                "context",
+                "context/ctxhttp"
+            ]
+        },
+        {
+            "name": "golang.org/x/sys",
+            "branch": "master",
+            "revision": "afadfcc7779c1f4db0f6f6438afcb108d9c9c7cd",
+            "packages": [
+                "unix"
+            ]
+        },
+        {
+            "name": "gopkg.in/yaml.v2",
+            "branch": "v2",
+            "revision": "a3f3340b5840cee44f372bddb5880fcbc419b46a",
+            "packages": [
+                "."
+            ]
+        }
+    ]
+}

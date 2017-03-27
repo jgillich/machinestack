@@ -1,0 +1,43 @@
+{
+    "dependencies": {
+        "github.com/dgrijalva/jwt-go": {
+            "branch": "master"
+        },
+        "github.com/go-pg/pg": {
+            "branch": "master"
+        },
+        "github.com/google/uuid": {
+            "branch": "master"
+        },
+        "github.com/gorilla/websocket": {
+            "branch": "master"
+        },
+        "github.com/hashicorp/consul": {
+            "branch": "master"
+        },
+        "github.com/hashicorp/go-multierror": {
+            "branch": "master"
+        },
+        "github.com/hashicorp/hcl": {
+            "branch": "master"
+        },
+        "github.com/jmcvetta/randutil": {
+            "branch": "master"
+        },
+        "github.com/labstack/echo": {
+            "branch": "master"
+        },
+        "github.com/lxc/lxd": {
+            "branch": "master"
+        },
+        "github.com/mitchellh/cli": {
+            "branch": "master"
+        },
+        "github.com/mitchellh/mapstructure": {
+            "branch": "master"
+        },
+        "github.com/stretchr/testify": {
+            "branch": "master"
+        }
+    }
+}
