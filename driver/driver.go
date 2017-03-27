@@ -5,7 +5,7 @@ import (
 	"io"
 
 	"github.com/faststackco/machinestack/config"
-	"github.com/gorilla/websocket"
+	"github.com/lxc/lxd/shared/api"
 )
 
 type Factory func(config.DriverOptions) (Driver, error)
@@ -26,5 +26,8 @@ func NewDriver(name string, options config.DriverOptions) (Driver, error) {
 type Driver interface {
 	Create(name, image string) error
 	Delete(name string) error
-	Exec(name string, stdin io.ReadCloser, stdout io.WriteCloser, stderr io.WriteCloser, controlHandler func(*websocket.Conn)) error
+	Exec(name string, stdin io.ReadCloser, stdout io.WriteCloser, control chan ControlMessage) error
 }
+
+// TODO we probably want a generic type here in the future
+type ControlMessage api.ContainerExecControl

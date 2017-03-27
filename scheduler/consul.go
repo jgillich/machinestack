@@ -7,7 +7,6 @@ import (
 
 	"github.com/faststackco/machinestack/config"
 	"github.com/faststackco/machinestack/driver"
-	"github.com/gorilla/websocket"
 	"github.com/hashicorp/consul/api"
 	"github.com/jmcvetta/randutil"
 )
@@ -91,7 +90,7 @@ func (c *ConsulScheduler) Delete(name, driverName, nodeID string) error {
 	return nil
 }
 
-func (c *ConsulScheduler) Exec(name, driverName, nodeID string, stdin io.ReadCloser, stdout io.WriteCloser, stderr io.WriteCloser, controlHandler func(*websocket.Conn)) error {
+func (c *ConsulScheduler) Exec(name, driverName, nodeID string, stdin io.ReadCloser, stdout io.WriteCloser, control chan driver.ControlMessage) error {
 
 	node, _, err := c.catalog.Node(nodeID, nil)
 	if err != nil {
@@ -103,7 +102,7 @@ func (c *ConsulScheduler) Exec(name, driverName, nodeID string, stdin io.ReadClo
 		return err
 	}
 
-	return driver.Exec(name, stdin, stdout, stderr, controlHandler)
+	return driver.Exec(name, stdin, stdout, control)
 }
 
 func (c *ConsulScheduler) newDriver(name string, node *api.Node) (driver.Driver, error) {

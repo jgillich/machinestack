@@ -2,14 +2,29 @@ package handler
 
 import (
 	"fmt"
+	"io"
 	"net/http"
+	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
+	"github.com/faststackco/machinestack/driver"
+	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 	"github.com/labstack/echo"
 )
 
-func (h *Handler) ExecMachine(c echo.Context) error {
+var (
+	execs map[string]exec
+)
+
+type exec struct {
+	stdin   io.WriteCloser
+	stdout  io.ReadCloser
+	control chan driver.ControlMessage
+	created time.Time
+}
+
+func (h *Handler) CreateExec(c echo.Context) error {
 
 	name := c.Param("name")
 	claims := c.Get("user").(*jwt.Token).Claims.(*JwtClaims)
@@ -23,17 +38,63 @@ func (h *Handler) ExecMachine(c echo.Context) error {
 		return c.String(http.StatusBadRequest, fmt.Sprintf("machine '%s' is not owned by '%s'", name, claims.Name))
 	}
 
-	h.sched.Exec()
+	inr, inw := io.Pipe()
+	outr, outw := io.Pipe()
+	control := make(chan driver.ControlMessage)
+
+	h.sched.Exec(machine.Name, machine.Driver, machine.Node, inr, outw, control)
+
+	id := uuid.New().String()
+
+	execs[id] = exec{
+		stdin:   inw,
+		stdout:  outr,
+		control: control,
+		created: time.Now(),
+	}
+
+	return c.String(http.StatusCreated, id)
+}
+
+func (h *Handler) ExecIO(c echo.Context) error {
+
+	id := c.Param("id")
+	exec, ok := execs[id]
+	if !ok {
+		return c.String(http.StatusNotFound, fmt.Sprintf("exec '%s' not found", id))
+	}
 
 	upgrader := websocket.Upgrader{}
 
-	ws, err := upgrader.Upgrade(c.Response(), c.Request(), nil)
+	conn, err := upgrader.Upgrade(c.Response(), c.Request(), nil)
 	if err != nil {
 		return err
 	}
-	defer ws.Close()
+	defer conn.Close()
 
-	// ...
+	for {
+		messageType, r, err := conn.NextReader()
+		if err != nil {
+			return nil
+		}
+		if _, err := io.Copy(exec.stdin, r); err != nil {
+			return err
+		}
 
+		w, err := conn.NextWriter(messageType)
+		if err != nil {
+			return err
+		}
+		if _, err := io.Copy(w, exec.stdout); err != nil {
+			return err
+		}
+		if err := w.Close(); err != nil {
+			return err
+		}
+	}
+}
+
+func (h *Handler) ExecControl(c echo.Context) error {
+	// TODO
 	return nil
 }

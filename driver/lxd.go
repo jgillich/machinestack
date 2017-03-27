@@ -1,6 +1,7 @@
 package driver
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"io"
@@ -100,13 +101,27 @@ func (d *LxdDriver) Delete(name string) error {
 	return nil
 }
 
-func (d *LxdDriver) Exec(name string, stdin io.ReadCloser, stdout io.WriteCloser, stderr io.WriteCloser, controlHandler func(*websocket.Conn)) error {
+func (d *LxdDriver) Exec(name string, stdin io.ReadCloser, stdout io.WriteCloser, control chan ControlMessage) error {
 
-	controlHandlerWrapper := func(c *lxd.Client, control *websocket.Conn) {
-		controlHandler(control)
+	controlHandlerWrapper := func(c *lxd.Client, conn *websocket.Conn) {
+		for msg := range control {
+
+			w, err := conn.NextWriter(websocket.TextMessage)
+			if err != nil {
+				return // TODO log
+			}
+
+			buf, err := json.Marshal(msg)
+			if err != nil {
+				return // TODO log
+			}
+			_, err = w.Write(buf)
+
+			w.Close()
+		}
 	}
 
-	_, err := d.client.Exec(name, []string{"/bin/bash"}, nil, stdin, stdout, stderr, controlHandlerWrapper, 80, 25)
+	_, err := d.client.Exec(name, []string{"/bin/bash"}, nil, stdin, stdout, nil, controlHandlerWrapper, 80, 25)
 
 	return err
 }

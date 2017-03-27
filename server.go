@@ -24,7 +24,7 @@ func NewServer(config *config.Config) (*Server, error) {
 		Database: config.PostgresConfig.Database,
 	})
 
-	sched, err := scheduler.NewScheduler(config.SchedulerConfig.Name, redis, &config.DriverConfig.Options)
+	sched, err := scheduler.NewScheduler(config.SchedulerConfig.Name, &config.DriverConfig.Options)
 	if err != nil {
 		return nil, err
 	}
@@ -42,8 +42,11 @@ func NewServer(config *config.Config) (*Server, error) {
 	}))
 
 	echo.POST("/machines", hand.CreateMachine)
-
 	echo.DELETE("/machines/:name", hand.DeleteMachine)
+
+	echo.POST("/machines/:name/exec", hand.CreateExec)
+	echo.GET("/exec/:id/io", hand.ExecIO)
+	echo.GET("/exec/:id/control", hand.ExecControl)
 
 	return &Server{config.Address, config.TLSConfig, *echo}, nil
 }

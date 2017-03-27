@@ -5,7 +5,6 @@ import (
 
 	"github.com/faststackco/machinestack/config"
 	"github.com/faststackco/machinestack/driver"
-	"github.com/gorilla/websocket"
 )
 
 type LocalScheduler struct {
@@ -45,11 +44,11 @@ func (c *LocalScheduler) Delete(name, driverName, node string) error {
 	return nil
 }
 
-func (c *LocalScheduler) Exec(name, driverName, node string, stdin io.ReadCloser, stdout io.WriteCloser, stderr io.WriteCloser, controlHandler func(*websocket.Conn)) error {
+func (c *LocalScheduler) Exec(name, driverName, node string, stdin io.ReadCloser, stdout io.WriteCloser, control chan driver.ControlMessage) error {
 	driver, err := driver.NewDriver(driverName, *c.driverOptions)
 	if err != nil {
 		return err
 	}
 
-	return driver.Exec(name, stdin, stdout, stderr, controlHandler)
+	return driver.Exec(name, stdin, stdout, control)
 }

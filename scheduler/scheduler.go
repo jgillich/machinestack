@@ -5,13 +5,13 @@ import (
 	"io"
 
 	"github.com/faststackco/machinestack/config"
-	"github.com/gorilla/websocket"
+	"github.com/faststackco/machinestack/driver"
 )
 
 type Scheduler interface {
 	Create(name, image, driverName string) (string, error)
 	Delete(name, driverName, node string) error
-	Exec(name, driverName, node string, stdin io.ReadCloser, stdout io.WriteCloser, stderr io.WriteCloser, controlHandler func(*websocket.Conn)) error
+	Exec(name, driverName, node string, stdin io.ReadCloser, stdout io.WriteCloser, control chan driver.ControlMessage) error
 }
 
 func NewScheduler(name string, options *config.DriverOptions) (Scheduler, error) {
