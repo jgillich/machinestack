@@ -1,50 +1,37 @@
 package scheduler
 
 import (
-	"fmt"
 	"io"
 
 	"github.com/faststackco/machinestack/config"
 	"github.com/faststackco/machinestack/driver"
 	"github.com/gorilla/websocket"
-	redis "gopkg.in/redis.v5"
 )
 
 type LocalScheduler struct {
-	redis         *redis.Client
 	driverOptions *config.DriverOptions
 }
 
-func NewLocalScheduler(redis *redis.Client, options *config.DriverOptions) (Scheduler, error) {
-	return &ConsulScheduler{
-		redis:         redis,
+func NewLocalScheduler(options *config.DriverOptions) (Scheduler, error) {
+	return &LocalScheduler{
 		driverOptions: options,
 	}, nil
 }
 
-func (c *LocalScheduler) Create(name, image, driverName string) error {
+func (c *LocalScheduler) Create(name, image, driverName string) (string, error) {
 	driver, err := driver.NewDriver(name, *c.driverOptions)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	if err := driver.Create(name, image); err != nil {
-		return err
+		return "", err
 	}
 
-	return c.redis.HMSet(fmt.Sprintf("machine:%s", name), map[string]string{
-		"image":  image,
-		"driver": driverName,
-	}).Err()
+	return "", nil
 }
 
-func (c *LocalScheduler) Delete(name string) error {
-	hash, err := c.redis.HGetAll(fmt.Sprintf("machine:%s", name)).Result()
-
-	driverName, ok := hash["driver"]
-	if !ok {
-		return fmt.Errorf("machine '%s' does not exist", name)
-	}
+func (c *LocalScheduler) Delete(name, driverName, node string) error {
 
 	driver, err := driver.NewDriver(driverName, *c.driverOptions)
 	if err != nil {
@@ -55,17 +42,10 @@ func (c *LocalScheduler) Delete(name string) error {
 		return err
 	}
 
-	return c.redis.HDel(fmt.Sprintf("machine:%s", name)).Err()
+	return nil
 }
 
-func (c *LocalScheduler) Exec(name string, stdin io.ReadCloser, stdout io.WriteCloser, stderr io.WriteCloser, controlHandler func(*websocket.Conn)) error {
-	hash, err := c.redis.HGetAll(fmt.Sprintf("machine:%s", name)).Result()
-
-	driverName, ok := hash["driver"]
-	if !ok {
-		return fmt.Errorf("machine '%s' does not exist", name)
-	}
-
+func (c *LocalScheduler) Exec(name, driverName, node string, stdin io.ReadCloser, stdout io.WriteCloser, stderr io.WriteCloser, controlHandler func(*websocket.Conn)) error {
 	driver, err := driver.NewDriver(driverName, *c.driverOptions)
 	if err != nil {
 		return err

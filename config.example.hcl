@@ -13,9 +13,11 @@ tls {
   key_file = "/tls.key"
 }
 
-redis {
+postgres {
   address   = "localhost:6379"
+  username = "postgres"
   password  = ""
+  database = "faststack"
 }
 
 

@@ -6,21 +6,20 @@ import (
 
 	"github.com/faststackco/machinestack/config"
 	"github.com/gorilla/websocket"
-	redis "gopkg.in/redis.v5"
 )
 
 type Scheduler interface {
-	Create(name, image, driverName string) error
-	Delete(name string) error
-	Exec(name string, stdin io.ReadCloser, stdout io.WriteCloser, stderr io.WriteCloser, controlHandler func(*websocket.Conn)) error
+	Create(name, image, driverName string) (string, error)
+	Delete(name, driverName, node string) error
+	Exec(name, driverName, node string, stdin io.ReadCloser, stdout io.WriteCloser, stderr io.WriteCloser, controlHandler func(*websocket.Conn)) error
 }
 
-func NewScheduler(name string, redis *redis.Client, options *config.DriverOptions) (Scheduler, error) {
+func NewScheduler(name string, options *config.DriverOptions) (Scheduler, error) {
 	switch name {
 	case "local":
-		return NewLocalScheduler(redis, options)
+		return NewLocalScheduler(options)
 	case "consul":
-		return NewConsulScheduler(redis, options)
+		return NewConsulScheduler(options)
 	default:
 		return nil, fmt.Errorf("unknown scheduler '%s'", name)
 	}

@@ -17,7 +17,7 @@ type Config struct {
 
 	DriverConfig *DriverConfig
 
-	RedisConfig *RedisConfig
+	PostgresConfig *PostgresConfig
 }
 
 // TLSConfig holds various TLS related configurations
@@ -45,10 +45,11 @@ type SchedulerConfig struct {
 	Name string
 }
 
-type RedisConfig struct {
+type PostgresConfig struct {
 	Address  string
+	Username string
 	Password string
-	Database int
+	Database string
 }
 
 type AuthConfig struct {

@@ -10,25 +10,22 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/hashicorp/consul/api"
 	"github.com/jmcvetta/randutil"
-	"gopkg.in/redis.v5"
 )
 
 type ConsulScheduler struct {
-	redis         *redis.Client
 	driverOptions *config.DriverOptions
 	health        *api.Health
 	catalog       *api.Catalog
 	kv            *api.KV
 }
 
-func NewConsulScheduler(redis *redis.Client, options *config.DriverOptions) (Scheduler, error) {
+func NewConsulScheduler(options *config.DriverOptions) (Scheduler, error) {
 	consul, err := api.NewClient(api.DefaultConfig())
 	if err != nil {
 		return nil, err
 	}
 
 	return &ConsulScheduler{
-		redis:         redis,
 		driverOptions: options,
 		catalog:       consul.Catalog(),
 		kv:            consul.KV(),
@@ -36,14 +33,14 @@ func NewConsulScheduler(redis *redis.Client, options *config.DriverOptions) (Sch
 	}, nil
 }
 
-func (c *ConsulScheduler) Create(name, image, driverName string) error {
+func (c *ConsulScheduler) Create(name, image, driverName string) (string, error) {
 	hosts, _, err := c.health.Service(driverName, "", true, nil)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	if len(hosts) == 0 {
-		return fmt.Errorf("no hosts found for driver '%v'", driverName)
+		return "", fmt.Errorf("no hosts found for driver '%v'", driverName)
 	}
 
 	var choices []randutil.Choice
@@ -58,41 +55,31 @@ func (c *ConsulScheduler) Create(name, image, driverName string) error {
 
 	choice, err := randutil.WeightedChoice(choices)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	entry := choice.Item.(*api.ServiceEntry)
 
 	driver, err := c.newDriver(driverName, entry.Node)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	if err := driver.Create(name, image); err != nil {
-		return err
+		return "", err
 	}
 
-	return c.redis.HMSet(fmt.Sprintf("machine:%s", name), map[string]string{
-		"image":  image,
-		"driver": driverName,
-		"nodeID": entry.Node.ID,
-	}).Err()
+	return entry.Node.ID, nil
 }
 
-func (c *ConsulScheduler) Delete(name string) error {
-	hash, err := c.redis.HGetAll(fmt.Sprintf("machine:%s", name)).Result()
-
-	nodeID, ok := hash["nodeID"]
-	if !ok {
-		return fmt.Errorf("machine '%s' does not exist", name)
-	}
+func (c *ConsulScheduler) Delete(name, driverName, nodeID string) error {
 
 	node, _, err := c.catalog.Node(nodeID, nil)
 	if err != nil {
 		return err
 	}
 
-	driver, err := c.newDriver(hash["driver"], node.Node)
+	driver, err := c.newDriver(driverName, node.Node)
 	if err != nil {
 		return err
 	}
@@ -101,23 +88,17 @@ func (c *ConsulScheduler) Delete(name string) error {
 		return err
 	}
 
-	return c.redis.HDel(fmt.Sprintf("machine:%s", name)).Err()
+	return nil
 }
 
-func (c *ConsulScheduler) Exec(name string, stdin io.ReadCloser, stdout io.WriteCloser, stderr io.WriteCloser, controlHandler func(*websocket.Conn)) error {
-	hash, err := c.redis.HGetAll(fmt.Sprintf("machine:%s", name)).Result()
-
-	nodeID, ok := hash["nodeID"]
-	if !ok {
-		return fmt.Errorf("machine '%s' does not exist", name)
-	}
+func (c *ConsulScheduler) Exec(name, driverName, nodeID string, stdin io.ReadCloser, stdout io.WriteCloser, stderr io.WriteCloser, controlHandler func(*websocket.Conn)) error {
 
 	node, _, err := c.catalog.Node(nodeID, nil)
 	if err != nil {
 		return err
 	}
 
-	driver, err := c.newDriver(hash["driver"], node.Node)
+	driver, err := c.newDriver(driverName, node.Node)
 	if err != nil {
 		return err
 	}

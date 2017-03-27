@@ -75,7 +75,7 @@ func parseConfig(result *Config, list *ast.ObjectList) error {
 		"tls",
 		"scheduler",
 		"driver",
-		"redis",
+		"postgres",
 	}
 	if err := checkHCLKeys(list, valid); err != nil {
 		return multierror.Prefix(err, "config:")
@@ -89,7 +89,7 @@ func parseConfig(result *Config, list *ast.ObjectList) error {
 	delete(m, "tls")
 	delete(m, "scheduler")
 	delete(m, "driver")
-	delete(m, "redis")
+	delete(m, "postgres")
 	delete(m, "auth")
 
 	// Decode the rest
@@ -118,10 +118,10 @@ func parseConfig(result *Config, list *ast.ObjectList) error {
 		}
 	}
 
-	// Parse the redis config
-	if o := list.Filter("redis"); len(o.Items) > 0 {
-		if err := parseRedisConfig(&result.RedisConfig, o); err != nil {
-			return multierror.Prefix(err, "redis ->")
+	// Parse the postgres config
+	if o := list.Filter("postgres"); len(o.Items) > 0 {
+		if err := parsePostgresConfig(&result.PostgresConfig, o); err != nil {
+			return multierror.Prefix(err, "postgres ->")
 		}
 	}
 
@@ -226,10 +226,10 @@ func parseDriverConfig(result **DriverConfig, list *ast.ObjectList) error {
 	return nil
 }
 
-func parseRedisConfig(result **RedisConfig, list *ast.ObjectList) error {
+func parsePostgresConfig(result **PostgresConfig, list *ast.ObjectList) error {
 	list = list.Elem()
 	if len(list.Items) > 1 {
-		return fmt.Errorf("only one 'redis' block allowed")
+		return fmt.Errorf("only one 'postgres' block allowed")
 	}
 
 	listVal := list.Items[0].Val
@@ -249,11 +249,11 @@ func parseRedisConfig(result **RedisConfig, list *ast.ObjectList) error {
 		return err
 	}
 
-	var redisConfig RedisConfig
-	if err := mapstructure.WeakDecode(m, &redisConfig); err != nil {
+	var postgresConfig PostgresConfig
+	if err := mapstructure.WeakDecode(m, &postgresConfig); err != nil {
 		return err
 	}
-	*result = &redisConfig
+	*result = &postgresConfig
 	return nil
 }
 

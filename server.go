@@ -4,9 +4,9 @@ import (
 	"github.com/faststackco/machinestack/config"
 	"github.com/faststackco/machinestack/handler"
 	"github.com/faststackco/machinestack/scheduler"
+	"github.com/go-pg/pg"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
-	"gopkg.in/redis.v5"
 )
 
 type Server struct {
@@ -17,10 +17,11 @@ type Server struct {
 
 func NewServer(config *config.Config) (*Server, error) {
 
-	redis := redis.NewClient(&redis.Options{
-		Addr:     config.RedisConfig.Address,
-		Password: config.RedisConfig.Password,
-		DB:       config.RedisConfig.Database,
+	db := pg.Connect(&pg.Options{
+		Addr:     config.PostgresConfig.Address,
+		User:     config.PostgresConfig.Username,
+		Password: config.PostgresConfig.Password,
+		Database: config.PostgresConfig.Database,
 	})
 
 	sched, err := scheduler.NewScheduler(config.SchedulerConfig.Name, redis, &config.DriverConfig.Options)
@@ -28,7 +29,7 @@ func NewServer(config *config.Config) (*Server, error) {
 		return nil, err
 	}
 
-	hand := handler.NewHandler(redis, sched)
+	hand := handler.NewHandler(db, sched)
 
 	echo := echo.New()
 
