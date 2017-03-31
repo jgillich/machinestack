@@ -1,0 +1,35 @@
+box: golang
+build:
+  steps:
+    - wercker/setup-go-workspace:
+        package-dir: github.com/faststackco/machinestack
+    - wercker/golint:
+        exclude: vendor
+    - kyokomi/dep
+    - script:
+        name: go test
+        code: |
+          go test .
+    - script:
+        name: go build
+        code: CGO_ENABLED=0 go build -a -ldflags '-s' -installsuffix cgo -o app .
+    - script:
+        name: copy binary
+        code: cp app "$WERCKER_OUTPUT_DIR"
+deploy:
+  steps:
+    - script:
+      name: set-tag
+      code: |
+        if [ $WERCKER_GIT_BRANCH == "master" ]; then
+          export IMAGE_TAG="latest"
+        else
+          export IMAGE_TAG="$WERCKER_GIT_BRANCH"
+        fi
+    - internal/docker-scratch-push:
+      username: $QUAY_USERNAME
+      password: $QUAY_PASSWORD
+      cmd: ./app
+      tag: $IMAGE_TAG, $WERCKER_GIT_COMMIT
+      repository: quay.io/jgillich/machinestack
+      registry: https://quay.io
