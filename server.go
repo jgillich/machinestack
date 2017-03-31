@@ -53,7 +53,7 @@ func NewServer(config *config.Config) (*Server, error) {
 
 // Start server while auto detecting TLS settings
 func (s *Server) StartAuto() error {
-	if s.TLSConfig.Enable {
+	if s.TLSConfig != nil && s.TLSConfig.Enable {
 		if s.TLSConfig.Auto {
 			return s.StartAutoTLS(s.Address)
 		}

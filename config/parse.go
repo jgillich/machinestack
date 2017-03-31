@@ -109,6 +109,8 @@ func parseConfig(result *Config, list *ast.ObjectList) error {
 		if err := parseSchedulerConfig(&result.SchedulerConfig, o); err != nil {
 			return multierror.Prefix(err, "scheduler ->")
 		}
+	} else {
+		// FIXME error scheduler config missing
 	}
 
 	// Parse the cluster config
@@ -236,6 +238,7 @@ func parsePostgresConfig(result **PostgresConfig, list *ast.ObjectList) error {
 
 	valid := []string{
 		"address",
+		"username",
 		"password",
 		"database",
 	}
