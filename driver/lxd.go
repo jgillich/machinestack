@@ -2,7 +2,7 @@ package driver
 
 import (
 	"encoding/json"
-	"fmt"
+	"errors"
 
 	"io"
 
@@ -13,10 +13,12 @@ import (
 	"github.com/lxc/lxd/shared/api"
 )
 
+// LxdDriver implements the Driver interface for LXD
 type LxdDriver struct {
 	client *lxd.Client
 }
 
+// NewLxdDriver creates a new LxdDriver
 func NewLxdDriver(options config.DriverOptions) (Driver, error) {
 
 	remote := lxd.RemoteConfig{
@@ -42,6 +44,7 @@ func NewLxdDriver(options config.DriverOptions) (Driver, error) {
 	return &LxdDriver{client: client}, nil
 }
 
+// Create creates a new machine
 func (d *LxdDriver) Create(name, image string) error {
 
 	profiles := []string{"default"}
@@ -66,6 +69,7 @@ func (d *LxdDriver) Create(name, image string) error {
 	return nil
 }
 
+// Delete deletes machine
 func (d *LxdDriver) Delete(name string) error {
 
 	container, err := d.client.ContainerInfo(name)
@@ -85,7 +89,7 @@ func (d *LxdDriver) Delete(name string) error {
 		}
 
 		if op.StatusCode == api.Failure {
-			return fmt.Errorf("Stopping container failed!")
+			return errors.New("stopping container failed")
 		}
 	}
 
@@ -101,6 +105,7 @@ func (d *LxdDriver) Delete(name string) error {
 	return nil
 }
 
+// Exec creates a new exec session
 func (d *LxdDriver) Exec(name string, stdin io.ReadCloser, stdout io.WriteCloser, control chan ControlMessage) error {
 
 	controlHandlerWrapper := func(c *lxd.Client, conn *websocket.Conn) {

@@ -24,6 +24,7 @@ type exec struct {
 	created time.Time
 }
 
+// CreateExec creates a new exec session
 func (h *Handler) CreateExec(c echo.Context) error {
 
 	name := c.Param("name")
@@ -56,6 +57,7 @@ func (h *Handler) CreateExec(c echo.Context) error {
 	return c.String(http.StatusCreated, id)
 }
 
+// ExecIO exposes stdin and stdout
 func (h *Handler) ExecIO(c echo.Context) error {
 
 	id := c.Param("id")
@@ -94,6 +96,7 @@ func (h *Handler) ExecIO(c echo.Context) error {
 	}
 }
 
+// ExecControl exposes the control socket
 func (h *Handler) ExecControl(c echo.Context) error {
 	id := c.Param("id")
 	exec, ok := execs[id]

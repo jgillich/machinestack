@@ -9,12 +9,14 @@ import (
 	"github.com/labstack/echo/middleware"
 )
 
+// Server is the http server that serves the api
 type Server struct {
 	Address   string
 	TLSConfig *config.TLSConfig
-	echo.Echo
+	echo      *echo.Echo
 }
 
+// NewServer creates a new Server
 func NewServer(config *config.Config) (*Server, error) {
 
 	db := pg.Connect(&pg.Options{
@@ -48,16 +50,16 @@ func NewServer(config *config.Config) (*Server, error) {
 	echo.GET("/exec/:id/io", hand.ExecIO)
 	echo.GET("/exec/:id/control", hand.ExecControl)
 
-	return &Server{config.Address, config.TLSConfig, *echo}, nil
+	return &Server{config.Address, config.TLSConfig, echo}, nil
 }
 
-// Start server while auto detecting TLS settings
-func (s *Server) StartAuto() error {
+// Start starts the server
+func (s *Server) Start() error {
 	if s.TLSConfig != nil && s.TLSConfig.Enable {
 		if s.TLSConfig.Auto {
-			return s.StartAutoTLS(s.Address)
+			return s.echo.StartAutoTLS(s.Address)
 		}
-		return s.StartTLS(s.Address, s.TLSConfig.Cert, s.TLSConfig.Key)
+		return s.echo.StartTLS(s.Address, s.TLSConfig.Cert, s.TLSConfig.Key)
 	}
-	return s.Start(s.Address)
+	return s.echo.Start(s.Address)
 }

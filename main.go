@@ -30,10 +30,12 @@ func main() {
 
 }
 
+// RunCommand nolint
 type RunCommand struct {
 	cli *cli.CLI
 }
 
+// Run nolint
 func (c RunCommand) Run(args []string) int {
 	var configPath = flag.String("config", "config.hcl", "config file path")
 
@@ -49,17 +51,19 @@ func (c RunCommand) Run(args []string) int {
 		return 1
 	}
 
-	if err := a.StartAuto(); err != nil {
+	if err := a.Start(); err != nil {
 		fmt.Println(err)
 		return 1
 	}
 	return 0
 }
 
+// Help nolint
 func (c RunCommand) Help() string {
 	return c.cli.HelpFunc(c.cli.Commands) + "\n"
 }
 
+// Synopsis nolint
 func (c RunCommand) Synopsis() string {
 	return ""
 }

@@ -8,6 +8,7 @@ import (
 	"github.com/labstack/echo"
 )
 
+// CreateMachine creates a new machine
 func (h *Handler) CreateMachine(c echo.Context) error {
 
 	claims := c.Get("user").(*jwt.Token).Claims.(*JwtClaims)
@@ -44,6 +45,7 @@ func (h *Handler) CreateMachine(c echo.Context) error {
 	return c.String(http.StatusCreated, "created")
 }
 
+// DeleteMachine deletes a machine
 func (h *Handler) DeleteMachine(c echo.Context) error {
 
 	name := c.Param("name")

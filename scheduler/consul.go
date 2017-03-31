@@ -11,6 +11,7 @@ import (
 	"github.com/jmcvetta/randutil"
 )
 
+// ConsulScheduler distributes machines among a Consul cluster
 type ConsulScheduler struct {
 	driverOptions *config.DriverOptions
 	health        *api.Health
@@ -18,6 +19,7 @@ type ConsulScheduler struct {
 	kv            *api.KV
 }
 
+// NewConsulScheduler creates a new ConsulScheduler
 func NewConsulScheduler(options *config.DriverOptions) (Scheduler, error) {
 	consul, err := api.NewClient(api.DefaultConfig())
 	if err != nil {
@@ -32,6 +34,7 @@ func NewConsulScheduler(options *config.DriverOptions) (Scheduler, error) {
 	}, nil
 }
 
+// Create creates a new machine
 func (c *ConsulScheduler) Create(name, image, driverName string) (string, error) {
 	hosts, _, err := c.health.Service(driverName, "", true, nil)
 	if err != nil {
@@ -71,6 +74,7 @@ func (c *ConsulScheduler) Create(name, image, driverName string) (string, error)
 	return entry.Node.ID, nil
 }
 
+// Delete deletes a machine
 func (c *ConsulScheduler) Delete(name, driverName, nodeID string) error {
 
 	node, _, err := c.catalog.Node(nodeID, nil)
@@ -90,6 +94,7 @@ func (c *ConsulScheduler) Delete(name, driverName, nodeID string) error {
 	return nil
 }
 
+// Exec creates an new exec session
 func (c *ConsulScheduler) Exec(name, driverName, nodeID string, stdin io.ReadCloser, stdout io.WriteCloser, control chan driver.ControlMessage) error {
 
 	node, _, err := c.catalog.Node(nodeID, nil)
