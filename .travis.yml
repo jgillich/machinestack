@@ -3,6 +3,7 @@ dist: trusty
 sudo: required
 before_install:
   - sudo /etc/init.d/postgresql stop
+  - sudo apt-get remove postgresql-9.2 postgresql-9.3 postgresql-9.4 postgresql-9.5 -y
   - sudo add-apt-repository ppa:ubuntu-lxc/lxd-stable -y
   - sudo apt-get update -q
   - sudo apt-get dist-upgrade -o Dpkg::Options::="--force-confnew" --force-yes
