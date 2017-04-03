@@ -1,6 +1,9 @@
 language: go
 sudo: required
 before_install:
-  - sudo apt-get -t trusty-backports install lxd
+  - sudo add-apt-repository ppa:ubuntu-lxc/lxd-stable -y
+  - sudo apt-get update -q
+  - sudo apt-get dist-upgrade -y
+  - sudo apt-get install lxd -y
   - go get -u github.com/golang/dep/...
 install: dep ensure
