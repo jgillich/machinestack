@@ -1,7 +1,7 @@
 language: go
+dist: trusty
 sudo: required
 before_install:
-  # must stop postgres before upgrading
   - sudo /etc/init.d/postgresql stop
   - sudo add-apt-repository ppa:ubuntu-lxc/lxd-stable -y
   - sudo apt-get update -q
