@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	jwt "github.com/dgrijalva/jwt-go"
+	"github.com/faststackco/machinestack/driver"
 	"github.com/labstack/echo"
 )
 
@@ -18,7 +19,7 @@ func (h *Handler) CreateMachine(c echo.Context) error {
 		return err
 	}
 
-	if count >= claims.AppMetadata.Quota.Instances {
+	if count >= claims.MachineQuota.Instances {
 		return c.String(http.StatusMethodNotAllowed, "quota exceeded")
 	}
 
@@ -27,7 +28,9 @@ func (h *Handler) CreateMachine(c echo.Context) error {
 		return err
 	}
 
-	node, err := h.sched.Create(machine.Name, machine.Image, machine.Driver)
+	attrs := driver.MachineAttributes{CPU: claims.MachineQuota.CPU, RAM: claims.MachineQuota.RAM}
+
+	node, err := h.sched.Create(machine.Name, machine.Image, machine.Driver, attrs)
 	if err != nil {
 		return err
 	}

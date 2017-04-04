@@ -19,22 +19,16 @@ func NewHandler(db *pg.DB, sched scheduler.Scheduler) *Handler {
 
 // JwtClaims are the custom claims we use
 type JwtClaims struct {
-	Name        string      `json:"name"`
-	Email       string      `json:"email"`
-	AppMetadata AppMetadata `json:"app_metadata"`
+	Name         string       `json:"name"`
+	Email        string       `json:"email"`
+	MachineQuota MachineQuota `json:"machine_quota"`
 	jwt.StandardClaims
 }
 
-// AppMetadata do we really need this? TODO
-type AppMetadata struct {
-	Quota Quota `json:"quota"`
-}
-
-// Quota defines how many instances a user can create, and how much cpu and ram they get
-// CPU translates to cores, RAM translates to GB
-type Quota struct {
+// MachineQuota defines how many instances a user can create, and how many cores and GB RAM is assigned
+type MachineQuota struct {
 	Instances int `json:"instances"`
-	CPU       int `json:"cpus"`
+	CPU       int `json:"cpu"`
 	RAM       int `json:"ram"`
 }
 

@@ -35,7 +35,7 @@ func NewConsulScheduler(options *config.DriverOptions) (Scheduler, error) {
 }
 
 // Create creates a new machine
-func (c *ConsulScheduler) Create(name, image, driverName string) (string, error) {
+func (c *ConsulScheduler) Create(name, image, driverName string, attrs driver.MachineAttributes) (string, error) {
 	hosts, _, err := c.health.Service(driverName, "", true, nil)
 	if err != nil {
 		return "", err
@@ -67,7 +67,7 @@ func (c *ConsulScheduler) Create(name, image, driverName string) (string, error)
 		return "", err
 	}
 
-	if err := driver.Create(name, image); err != nil {
+	if err := driver.Create(name, image, attrs); err != nil {
 		return "", err
 	}
 

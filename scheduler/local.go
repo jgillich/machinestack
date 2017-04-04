@@ -20,13 +20,13 @@ func NewLocalScheduler(options *config.DriverOptions) (Scheduler, error) {
 }
 
 // Create creates a new machine
-func (c *LocalScheduler) Create(name, image, driverName string) (string, error) {
+func (c *LocalScheduler) Create(name, image, driverName string, attrs driver.MachineAttributes) (string, error) {
 	driver, err := driver.NewDriver(name, *c.driverOptions)
 	if err != nil {
 		return "", err
 	}
 
-	if err := driver.Create(name, image); err != nil {
+	if err := driver.Create(name, image, attrs); err != nil {
 		return "", err
 	}
 

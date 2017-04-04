@@ -17,7 +17,7 @@ func TestLxdDriver(t *testing.T) {
 	driver, err := NewLxdDriver(options)
 	assert.NoError(t, err)
 
-	assert.NoError(t, driver.Create(name, image))
+	assert.NoError(t, driver.Create(name, image, MachineAttributes{CPU: 1, RAM: 1}))
 
 	containers, err := driver.(*LxdDriver).client.ListContainers()
 	assert.NoError(t, err)

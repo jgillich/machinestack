@@ -6,6 +6,8 @@ import (
 
 	"io"
 
+	"fmt"
+
 	"github.com/faststackco/machinestack/config"
 	"github.com/gorilla/websocket"
 	"github.com/lxc/lxd"
@@ -45,17 +47,18 @@ func NewLxdDriver(options config.DriverOptions) (Driver, error) {
 }
 
 // Create creates a new machine
-func (d *LxdDriver) Create(name, image string) error {
+func (d *LxdDriver) Create(name, image string, attrs MachineAttributes) error {
 
 	profiles := []string{"default"}
 
-	config := make(map[string]string)
-	config["limits.cpu"] = "4"
-	config["limits.cpu.allowance"] = "10%"
-	config["limits.cpu.priority"] = "0"
-	config["limits.disk.priority"] = "0"
-	config["limits.memory"] = "1GB"
-	config["limits.processes"] = "500"
+	config := map[string]string{
+		"limits.cpu":           string(attrs.CPU),
+		"limits.cpu.allowance": "10%",
+		"limits.cpu.priority":  "0",
+		"limits.disk.priority": "0",
+		"limits.memory":        fmt.Sprintf("%vGB", attrs.RAM),
+		"limits.processes":     "500",
+	}
 
 	res, err := d.client.Init(name, "images", image, &profiles, config, nil, false)
 	if err != nil {
