@@ -49,7 +49,7 @@ func (d *LxdDriver) Create(name, image string) error {
 
 	profiles := []string{"default"}
 
-	var config map[string]string
+	config := make(map[string]string)
 	config["limits.cpu"] = "4"
 	config["limits.cpu.allowance"] = "10%"
 	config["limits.cpu.priority"] = "0"
