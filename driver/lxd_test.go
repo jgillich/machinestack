@@ -7,7 +7,7 @@ import (
 )
 
 func TestLxdDriver(t *testing.T) {
-	name := "faststack-TestLxdDriver"
+	name := "TestLxdDriver"
 	image := "ubuntu/xenial"
 
 	options := map[string]string{

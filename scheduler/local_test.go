@@ -9,6 +9,9 @@ import (
 )
 
 func TestLocalScheduler(t *testing.T) {
+	name := "TestLocalScheduler"
+	image := "ubuntu/xenial"
+
 	options := config.DriverOptions{
 		"lxd.remote": "unix://",
 	}
@@ -16,8 +19,8 @@ func TestLocalScheduler(t *testing.T) {
 	sched, err := NewLocalScheduler(&options)
 	assert.NoError(t, err)
 
-	node, err := sched.Create("TestLocalScheduler", "ubuntu/trusty", "lxd", driver.MachineAttributes{CPU: 1, RAM: 1})
+	node, err := sched.Create(name, image, "lxd", driver.MachineAttributes{CPU: 1, RAM: 1})
 	assert.NoError(t, err)
 
-	assert.NoError(t, sched.Delete("TestLocalScheduler", "lxd", node))
+	assert.NoError(t, sched.Delete(name, "lxd", node))
 }
