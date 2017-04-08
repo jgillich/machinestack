@@ -4,6 +4,7 @@ import (
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/faststackco/machinestack/scheduler"
 	"github.com/go-pg/pg"
+	"github.com/labstack/echo"
 )
 
 // Handler stores common types needed by the api
@@ -25,6 +26,10 @@ type JwtClaims struct {
 	jwt.StandardClaims
 }
 
+func getJwtClaims(c echo.Context) *JwtClaims {
+	return c.Get("user").(*jwt.Token).Claims.(*JwtClaims)
+}
+
 // MachineQuota defines how many instances a user can create, and how many cores and GB RAM is assigned
 type MachineQuota struct {
 	Instances int `json:"instances"`
@@ -34,9 +39,9 @@ type MachineQuota struct {
 
 // Machine is a machine
 type Machine struct {
-	Name   string
-	Image  string // Image name
-	Owner  string // Owner name
-	Driver string // Driver name
-	Node   string // Node ID
+	Name   string `json:"name"`
+	Image  string `json:"image"`
+	User   string `json:"user"`
+	Driver string `json:"driver"`
+	Node   string `json:"-"`
 }

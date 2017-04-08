@@ -43,10 +43,12 @@ func NewServer(config *config.Config) (*Server, error) {
 		Claims:      handler.JwtClaims{},
 	}))
 
-	echo.POST("/machines", hand.CreateMachine)
-	echo.DELETE("/machines/:name", hand.DeleteMachine)
+	echo.GET("/machines", hand.MachineList)
+	echo.POST("/machines", hand.MachineCreate)
+	echo.GET("/machines/:name", hand.MachineInfo)
+	echo.DELETE("/machines/:name", hand.MachineDelete)
 
-	echo.POST("/machines/:name/exec", hand.CreateExec)
+	echo.POST("/machines/:name/exec", hand.ExecCreate)
 	echo.GET("/exec/:id/io", hand.ExecIO)
 	echo.GET("/exec/:id/control", hand.ExecControl)
 
