@@ -35,8 +35,8 @@
         },
         {
             "name": "github.com/go-pg/pg",
-            "version": "v6.0.0",
-            "revision": "e8d4cc8264796f383c96909ba1be6ae9677fa2b6",
+            "branch": "master",
+            "revision": "b80ead78e706aae155d29d808f0df17fccd8eea2",
             "packages": [
                 ".",
                 "internal",
@@ -65,7 +65,7 @@
         {
             "name": "github.com/hashicorp/consul",
             "branch": "master",
-            "revision": "523c0c54fec686d1331f628b0fe7cd15a1a23d50",
+            "revision": "3ef7dde64c27e015c61be5e08c3ca55199726b1a",
             "packages": [
                 "api"
             ]
@@ -137,7 +137,7 @@
         {
             "name": "github.com/labstack/echo",
             "branch": "master",
-            "revision": "22012e0e9da962b1b6a67b9e009d8eabe35d2d7e",
+            "revision": "62ab217b8c7d114b1b7bd8c877edaa702149cd2f",
             "packages": [
                 ".",
                 "middleware"
@@ -157,7 +157,7 @@
         {
             "name": "github.com/lxc/lxd",
             "branch": "master",
-            "revision": "7cb845b189c9c67fbb3ebb9dd9bb6088d0612f91",
+            "revision": "f0f838c53d2e4abf90e8b372cb3b16cba74436a9",
             "packages": [
                 ".",
                 "shared",
@@ -178,8 +178,8 @@
         },
         {
             "name": "github.com/mattn/go-isatty",
-            "version": "v0.0.1",
-            "revision": "3a115632dcd687f9c8cd01679c83a06a0e21c1f3",
+            "version": "v0.0.2",
+            "revision": "fc9e8d8ef48496124e79ae0df75490096eccf6fe",
             "packages": [
                 "."
             ]
@@ -187,7 +187,7 @@
         {
             "name": "github.com/mitchellh/cli",
             "branch": "master",
-            "revision": "8d6d9ab3c912dcb005ece87c40a41b9e73e1999a",
+            "revision": "ee8578a9c12a5bb9d55303b9665cc448772c81b8",
             "packages": [
                 "."
             ]
@@ -235,7 +235,7 @@
         {
             "name": "golang.org/x/crypto",
             "branch": "master",
-            "revision": "453249f01cfeb54c3d549ddb75ff152ca243f9d8",
+            "revision": "55a552f0823e0d3d54931488a2993ebd2fd0258c",
             "packages": [
                 "acme",
                 "acme/autocert"
@@ -244,7 +244,7 @@
         {
             "name": "golang.org/x/net",
             "branch": "master",
-            "revision": "6c23252515492caf9b228a9d5cabcdbde29f7f82",
+            "revision": "d1e1b351919c6738fdeb9893d5c998b161464f0c",
             "packages": [
                 "context",
                 "context/ctxhttp"
@@ -253,7 +253,7 @@
         {
             "name": "golang.org/x/sys",
             "branch": "master",
-            "revision": "afadfcc7779c1f4db0f6f6438afcb108d9c9c7cd",
+            "revision": "f3918c30c5c2cb527c0b071a27c35120a6c0719a",
             "packages": [
                 "unix"
             ]
@@ -261,7 +261,7 @@
         {
             "name": "gopkg.in/yaml.v2",
             "branch": "v2",
-            "revision": "a3f3340b5840cee44f372bddb5880fcbc419b46a",
+            "revision": "cd8b52f8269e0feb286dfeef29f8fe4d5b397e0b",
             "packages": [
                 "."
             ]

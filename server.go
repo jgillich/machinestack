@@ -33,26 +33,40 @@ func NewServer(config *config.Config) (*Server, error) {
 
 	hand := handler.NewHandler(db, sched)
 
-	echo := echo.New()
+	e := echo.New()
 
-	echo.Use(middleware.Gzip())
+	if config.LogLevel == "DEBUG" {
+		e.Debug = true
+	}
 
-	echo.Use(middleware.JWTWithConfig(middleware.JWTConfig{
-		SigningKey:  config.AuthConfig.Key,
-		TokenLookup: "header:Authorization",
-		Claims:      handler.JwtClaims{},
+	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
+		Format: "method=${method}, uri=${uri}, status=${status}\n",
 	}))
 
-	echo.GET("/machines", hand.MachineList)
-	echo.POST("/machines", hand.MachineCreate)
-	echo.GET("/machines/:name", hand.MachineInfo)
-	echo.DELETE("/machines/:name", hand.MachineDelete)
+	e.Use(middleware.Recover())
 
-	echo.POST("/machines/:name/exec", hand.ExecCreate)
-	echo.GET("/exec/:id/io", hand.ExecIO)
-	echo.GET("/exec/:id/control", hand.ExecControl)
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: config.AllowOrigins,
+		AllowMethods: []string{echo.GET, echo.PUT, echo.POST, echo.DELETE},
+	}))
 
-	return &Server{config.Address, config.TLSConfig, echo}, nil
+	e.Use(middleware.Gzip())
+
+	e.Use(middleware.JWTWithConfig(middleware.JWTConfig{
+		SigningKey: []byte(config.JwtConfig.Secret),
+		Claims:     &handler.JwtClaims{},
+	}))
+
+	e.GET("/machines", hand.MachineList)
+	e.POST("/machines", hand.MachineCreate)
+	e.GET("/machines/:name", hand.MachineInfo)
+	e.DELETE("/machines/:name", hand.MachineDelete)
+
+	e.POST("/machines/:name/exec", hand.ExecCreate)
+	e.GET("/exec/:id/io", hand.ExecIO)
+	e.GET("/exec/:id/control", hand.ExecControl)
+
+	return &Server{config.Address, config.TLSConfig, e}, nil
 }
 
 // Start starts the server

@@ -1,6 +1,8 @@
-address = ":7842"
+address = ":9610"
 
 log_level = "DEBUG"
+
+allow_origins = ["*"]
 
 tls {
   enable = true
@@ -21,8 +23,10 @@ postgres {
 }
 
 
-auth  {
-   key = "foobar"
+jwt {
+  # secret used by the jwt web token.
+  # generate by running openssl rand -base64 32
+  secret = ""
 }
 
 scheduler {

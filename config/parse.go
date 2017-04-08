@@ -71,7 +71,8 @@ func parseConfig(result *Config, list *ast.ObjectList) error {
 	valid := []string{
 		"address",
 		"log_level",
-		"auth",
+		"allow_origins",
+		"jwt",
 		"tls",
 		"scheduler",
 		"driver",
@@ -90,7 +91,7 @@ func parseConfig(result *Config, list *ast.ObjectList) error {
 	delete(m, "scheduler")
 	delete(m, "driver")
 	delete(m, "postgres")
-	delete(m, "auth")
+	delete(m, "jwt")
 
 	// Decode the rest
 	if err := mapstructure.WeakDecode(m, result); err != nil {
@@ -128,9 +129,9 @@ func parseConfig(result *Config, list *ast.ObjectList) error {
 	}
 
 	// Parse the auth config
-	if o := list.Filter("auth"); len(o.Items) > 0 {
-		if err := parseAuthConfig(&result.AuthConfig, o); err != nil {
-			return multierror.Prefix(err, "auth ->")
+	if o := list.Filter("jwt"); len(o.Items) > 0 {
+		if err := parseJwtConfig(&result.JwtConfig, o); err != nil {
+			return multierror.Prefix(err, "jwt ->")
 		}
 	}
 
@@ -260,7 +261,7 @@ func parsePostgresConfig(result **PostgresConfig, list *ast.ObjectList) error {
 	return nil
 }
 
-func parseAuthConfig(result **AuthConfig, list *ast.ObjectList) error {
+func parseJwtConfig(result **JwtConfig, list *ast.ObjectList) error {
 	list = list.Elem()
 	if len(list.Items) > 1 {
 		return fmt.Errorf("only one 'auth' block allowed")
@@ -269,7 +270,7 @@ func parseAuthConfig(result **AuthConfig, list *ast.ObjectList) error {
 	listVal := list.Items[0].Val
 
 	valid := []string{
-		"key",
+		"secret",
 	}
 
 	if err := checkHCLKeys(listVal, valid); err != nil {
@@ -281,11 +282,11 @@ func parseAuthConfig(result **AuthConfig, list *ast.ObjectList) error {
 		return err
 	}
 
-	var authConfig AuthConfig
-	if err := mapstructure.WeakDecode(m, &authConfig); err != nil {
+	var jwtConfig JwtConfig
+	if err := mapstructure.WeakDecode(m, &jwtConfig); err != nil {
 		return err
 	}
-	*result = &authConfig
+	*result = &jwtConfig
 	return nil
 }
 

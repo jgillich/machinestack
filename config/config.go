@@ -8,10 +8,12 @@ type Config struct {
 
 	LogLevel string
 
+	AllowOrigins []string
+
 	// TLSConfig holds various TLS related configurations
 	TLSConfig *TLSConfig
 
-	AuthConfig *AuthConfig
+	JwtConfig *JwtConfig
 
 	SchedulerConfig *SchedulerConfig
 
@@ -52,8 +54,8 @@ type PostgresConfig struct {
 	Database string
 }
 
-type AuthConfig struct {
-	Key string
+type JwtConfig struct {
+	Secret string
 }
 
 // DefaultConfig returns the default configuration
