@@ -11,7 +11,7 @@ func (h *Handler) MachineList(c echo.Context) error {
 
 	claims := getJwtClaims(c)
 
-	var machines []Machine
+	machines := []Machine{}
 	if err := h.db.Model(&machines).Where("owner = ?", claims.Name).Select(); err != nil {
 		return err
 	}
