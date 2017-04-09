@@ -12,7 +12,7 @@ func (h *Handler) MachineCreate(c echo.Context) error {
 
 	claims := getJwtClaims(c)
 
-	if count, err := h.db.Model(&Machine{Owner: claims.Name}).Count(); err != nil {
+	if count, err := h.db.Model(&Machine{}).Where("owner = ?", claims.Name).Count(); err != nil {
 		return err
 	} else if count >= claims.MachineQuota.Instances {
 		return Error(c, http.StatusForbidden, "quota exceeded")
@@ -23,7 +23,7 @@ func (h *Handler) MachineCreate(c echo.Context) error {
 		return err
 	}
 
-	if count, err := h.db.Model(&Machine{Name: machine.Name}).Count(); err != nil {
+	if count, err := h.db.Model(&Machine{}).Where("name = ?", machine.Name).Count(); err != nil {
 		return err
 	} else if count > 0 {
 		return Error(c, http.StatusForbidden, "machine with name '%s' exists", machine.Name)
