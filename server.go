@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/faststackco/machinestack/config"
@@ -40,8 +39,6 @@ func NewServer(config *config.Config) (*Server, error) {
 			return nil, err
 		}
 	}
-
-	fmt.Println(config.PostgresConfig)
 
 	sched, err := scheduler.NewScheduler(config.SchedulerConfig.Name, &config.DriverConfig.Options)
 	if err != nil {

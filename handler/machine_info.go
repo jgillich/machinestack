@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo"
@@ -19,8 +18,8 @@ func (h *Handler) MachineInfo(c echo.Context) error {
 	}
 
 	if machine.Owner != claims.Name {
-		return c.String(http.StatusBadRequest, fmt.Sprintf("machine '%s' is not owned by '%s'", name, claims.Name))
+		return Error(c, http.StatusBadRequest, "machine '%s' is not owned by '%s'", name, claims.Name)
 	}
 
-	return c.JSON(http.StatusOK, machine)
+	return Data(c, http.StatusOK, machine)
 }

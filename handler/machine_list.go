@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo"
@@ -17,7 +16,5 @@ func (h *Handler) MachineList(c echo.Context) error {
 		return err
 	}
 
-	fmt.Println(machines)
-
-	return c.JSON(http.StatusOK, machines)
+	return Data(c, http.StatusOK, machines)
 }

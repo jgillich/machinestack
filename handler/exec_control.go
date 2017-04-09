@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/faststackco/machinestack/driver"
@@ -14,7 +13,7 @@ func (h *Handler) ExecControl(c echo.Context) error {
 	id := c.Param("id")
 	exec, ok := execs[id]
 	if !ok {
-		return c.String(http.StatusNotFound, fmt.Sprintf("exec '%s' not found", id))
+		return Error(c, http.StatusNotFound, "exec '%s' not found", id)
 	}
 
 	upgrader := websocket.Upgrader{}

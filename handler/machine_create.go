@@ -15,7 +15,7 @@ func (h *Handler) MachineCreate(c echo.Context) error {
 	if count, err := h.db.Model(&Machine{Owner: claims.Name}).Count(); err != nil {
 		return err
 	} else if count >= claims.MachineQuota.Instances {
-		return c.String(http.StatusForbidden, "quota exceeded")
+		return Error(c, http.StatusForbidden, "quota exceeded")
 	}
 
 	machine := new(Machine)
@@ -26,7 +26,7 @@ func (h *Handler) MachineCreate(c echo.Context) error {
 	if count, err := h.db.Model(&Machine{Name: machine.Name}).Count(); err != nil {
 		return err
 	} else if count > 0 {
-		return c.String(http.StatusForbidden, "machine with name '%s' exists")
+		return Error(c, http.StatusForbidden, "machine with name '%s' exists", machine.Name)
 	}
 
 	attrs := driver.MachineAttributes{CPU: claims.MachineQuota.CPU, RAM: claims.MachineQuota.RAM}
@@ -46,5 +46,5 @@ func (h *Handler) MachineCreate(c echo.Context) error {
 		return err
 	}
 
-	return c.String(http.StatusCreated, "created")
+	return Message(c, http.StatusCreated, "created")
 }

@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"io"
 	"net/http"
 	"time"
@@ -34,7 +33,7 @@ func (h *Handler) ExecCreate(c echo.Context) error {
 	}
 
 	if machine.Owner != claims.Name {
-		return c.String(http.StatusBadRequest, fmt.Sprintf("machine '%s' is not owned by '%s'", name, claims.Name))
+		return Error(c, http.StatusBadRequest, "machine '%s' is not owned by '%s'", name, claims.Name)
 	}
 
 	inr, inw := io.Pipe()

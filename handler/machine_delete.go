@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo"
@@ -19,12 +18,12 @@ func (h *Handler) MachineDelete(c echo.Context) error {
 	}
 
 	if machine.Owner != claims.Name {
-		return c.String(http.StatusBadRequest, fmt.Sprintf("machine '%s' is not owned by '%s'", name, claims.Name))
+		return Error(c, http.StatusBadRequest, "machine '%s' is not owned by '%s'", name, claims.Name)
 	}
 
 	if err := h.sched.Delete(name, machine.Driver, machine.Node); err != nil {
 		return err
 	}
 
-	return c.String(http.StatusOK, "deleted")
+	return Message(c, http.StatusOK, "deleted")
 }
