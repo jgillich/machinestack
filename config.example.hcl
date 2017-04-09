@@ -16,7 +16,7 @@ tls {
 }
 
 postgres {
-  address   = "localhost:6379"
+  address   = "localhost:5432"
   username = "postgres"
   password  = ""
   database = "faststack"

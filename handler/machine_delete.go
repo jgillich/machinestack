@@ -14,11 +14,11 @@ func (h *Handler) MachineDelete(c echo.Context) error {
 	claims := getJwtClaims(c)
 
 	var machine Machine
-	if err := h.db.Model(&machine).Where("machine.name = ?", name).Select(); err != nil {
+	if err := h.db.Model(&machine).Where("name = ?", name).Select(); err != nil {
 		return err
 	}
 
-	if machine.User != claims.Name {
+	if machine.Owner != claims.Name {
 		return c.String(http.StatusBadRequest, fmt.Sprintf("machine '%s' is not owned by '%s'", name, claims.Name))
 	}
 

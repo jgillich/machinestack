@@ -235,19 +235,10 @@
         {
             "name": "golang.org/x/crypto",
             "branch": "master",
-            "revision": "55a552f0823e0d3d54931488a2993ebd2fd0258c",
+            "revision": "6022e334c1a8cce46fb30629dc30e835faa3844d",
             "packages": [
                 "acme",
                 "acme/autocert"
-            ]
-        },
-        {
-            "name": "golang.org/x/net",
-            "branch": "master",
-            "revision": "d1e1b351919c6738fdeb9893d5c998b161464f0c",
-            "packages": [
-                "context",
-                "context/ctxhttp"
             ]
         },
         {

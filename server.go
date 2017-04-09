@@ -1,10 +1,14 @@
 package main
 
 import (
+	"fmt"
+	"time"
+
 	"github.com/faststackco/machinestack/config"
 	"github.com/faststackco/machinestack/handler"
 	"github.com/faststackco/machinestack/scheduler"
 	"github.com/go-pg/pg"
+	"github.com/go-pg/pg/orm"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
@@ -20,11 +24,24 @@ type Server struct {
 func NewServer(config *config.Config) (*Server, error) {
 
 	db := pg.Connect(&pg.Options{
-		Addr:     config.PostgresConfig.Address,
-		User:     config.PostgresConfig.Username,
-		Password: config.PostgresConfig.Password,
-		Database: config.PostgresConfig.Database,
+		Addr:        config.PostgresConfig.Address,
+		User:        config.PostgresConfig.Username,
+		Password:    config.PostgresConfig.Password,
+		Database:    config.PostgresConfig.Database,
+		PoolSize:    20,
+		PoolTimeout: time.Second * 5,
+		ReadTimeout: time.Second * 5,
 	})
+
+	for _, model := range []interface{}{&handler.Machine{}} {
+		if err := db.CreateTable(model, &orm.CreateTableOptions{
+			Temp: true, // TODO remove temp, use migrations
+		}); err != nil {
+			return nil, err
+		}
+	}
+
+	fmt.Println(config.PostgresConfig)
 
 	sched, err := scheduler.NewScheduler(config.SchedulerConfig.Name, &config.DriverConfig.Options)
 	if err != nil {
@@ -40,10 +57,8 @@ func NewServer(config *config.Config) (*Server, error) {
 	}
 
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-		Format: "method=${method}, uri=${uri}, status=${status}\n",
+		Format: "${method} ${uri} ${status}\n",
 	}))
-
-	e.Use(middleware.Recover())
 
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: config.AllowOrigins,

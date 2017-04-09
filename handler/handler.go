@@ -41,7 +41,7 @@ type MachineQuota struct {
 type Machine struct {
 	Name   string `json:"name"`
 	Image  string `json:"image"`
-	User   string `json:"user"`
 	Driver string `json:"driver"`
+	Owner  string `json:"-"`
 	Node   string `json:"-"`
 }

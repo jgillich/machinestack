@@ -12,18 +12,21 @@ func (h *Handler) MachineCreate(c echo.Context) error {
 
 	claims := getJwtClaims(c)
 
-	count, err := h.db.Model(&Machine{}).Where("machine.user = ?", claims.Name).Count()
-	if err != nil {
+	if count, err := h.db.Model(&Machine{Owner: claims.Name}).Count(); err != nil {
 		return err
-	}
-
-	if count >= claims.MachineQuota.Instances {
-		return c.String(http.StatusMethodNotAllowed, "quota exceeded")
+	} else if count >= claims.MachineQuota.Instances {
+		return c.String(http.StatusForbidden, "quota exceeded")
 	}
 
 	machine := new(Machine)
 	if err := c.Bind(machine); err != nil {
 		return err
+	}
+
+	if count, err := h.db.Model(&Machine{Name: machine.Name}).Count(); err != nil {
+		return err
+	} else if count > 0 {
+		return c.String(http.StatusForbidden, "machine with name '%s' exists")
 	}
 
 	attrs := driver.MachineAttributes{CPU: claims.MachineQuota.CPU, RAM: claims.MachineQuota.RAM}
@@ -36,7 +39,7 @@ func (h *Handler) MachineCreate(c echo.Context) error {
 	if err = h.db.Insert(&Machine{
 		Name:  machine.Name,
 		Image: machine.Image,
-		User:  claims.Name,
+		Owner: claims.Name,
 		Node:  node,
 	}); err != nil {
 		// TODO machine still exists here, what to do?

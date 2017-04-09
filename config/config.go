@@ -4,22 +4,22 @@ package config
 type Config struct {
 
 	// Address is the socket to bind to
-	Address string
+	Address string `mapstructure:"address"`
 
-	LogLevel string
+	LogLevel string `mapstructure:"log_level"`
 
-	AllowOrigins []string
+	AllowOrigins []string `mapstructure:"allow_origins"`
 
 	// TLSConfig holds various TLS related configurations
-	TLSConfig *TLSConfig
+	TLSConfig *TLSConfig `mapstructure:"-"`
 
-	JwtConfig *JwtConfig
+	JwtConfig *JwtConfig `mapstructure:"-"`
 
-	SchedulerConfig *SchedulerConfig
+	SchedulerConfig *SchedulerConfig `mapstructure:"-"`
 
-	DriverConfig *DriverConfig
+	DriverConfig *DriverConfig `mapstructure:"-"`
 
-	PostgresConfig *PostgresConfig
+	PostgresConfig *PostgresConfig `mapstructure:"-"`
 }
 
 // TLSConfig holds various TLS related configurations
@@ -32,30 +32,30 @@ type TLSConfig struct {
 
 type DriverConfig struct {
 	// Enable specifies the name of drivers to enable
-	Enable []string
+	Enable []string `mapstructure:"enable"`
 
 	// Options provides arbitrary key-value configuration for internals,
 	// like authentication and drivers. The format is:
 	//
 	//	namespace.option = value
-	Options DriverOptions
+	Options DriverOptions `mapstructure:"options"`
 }
 
 type DriverOptions map[string]string
 
 type SchedulerConfig struct {
-	Name string
+	Name string `mapstructure:"name"`
 }
 
 type PostgresConfig struct {
-	Address  string
-	Username string
-	Password string
-	Database string
+	Address  string `mapstructure:"address"`
+	Username string `mapstructure:"username"`
+	Password string `mapstructure:"password"`
+	Database string `mapstructure:"database"`
 }
 
 type JwtConfig struct {
-	Secret string
+	Secret string `mapstructure:"secret"`
 }
 
 // DefaultConfig returns the default configuration
@@ -73,9 +73,4 @@ func DefaultDriverConfig() *DriverConfig {
 		Enable:  []string{},
 		Options: map[string]string{},
 	}
-}
-
-// Read returns the specified configuration value or "".
-func (c *DriverConfig) Read(id string) string {
-	return c.Options[id]
 }
