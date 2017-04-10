@@ -3,6 +3,7 @@ package handler
 import (
 	"net/http"
 
+	"github.com/go-pg/pg"
 	"github.com/labstack/echo"
 )
 
@@ -14,7 +15,10 @@ func (h *Handler) MachineInfo(c echo.Context) error {
 
 	var machine Machine
 	if err := h.db.Model(&machine).Where("name = ?", name).Select(); err != nil {
-		return err
+		if err != pg.ErrNoRows {
+			return err
+		}
+		return Error(c, http.StatusNotFound, "machine '%s' was not found", name)
 	}
 
 	if machine.Owner != claims.Name {
