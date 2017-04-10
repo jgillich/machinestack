@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/faststackco/machinestack/driver"
+	"github.com/faststackco/machinestack/model"
 	"github.com/labstack/echo"
 )
 
@@ -12,18 +13,18 @@ func (h *Handler) MachineCreate(c echo.Context) error {
 
 	claims := getJwtClaims(c)
 
-	if count, err := h.db.Model(&Machine{}).Where("owner = ?", claims.Name).Count(); err != nil {
+	if count, err := h.db.Model(&model.Machine{}).Where("owner = ?", claims.Name).Count(); err != nil {
 		return err
 	} else if count >= claims.MachineQuota.Instances {
 		return Error(c, http.StatusForbidden, "quota exceeded")
 	}
 
-	machine := new(Machine)
+	machine := new(model.Machine)
 	if err := c.Bind(machine); err != nil {
 		return err
 	}
 
-	if count, err := h.db.Model(&Machine{}).Where("name = ?", machine.Name).Count(); err != nil {
+	if count, err := h.db.Model(&model.Machine{}).Where("name = ?", machine.Name).Count(); err != nil {
 		return err
 	} else if count > 0 {
 		return Error(c, http.StatusForbidden, "machine with name '%s' exists", machine.Name)
@@ -36,7 +37,7 @@ func (h *Handler) MachineCreate(c echo.Context) error {
 		return err
 	}
 
-	if err = h.db.Insert(&Machine{
+	if err = h.db.Insert(&model.Machine{
 		Name:  machine.Name,
 		Image: machine.Image,
 		Owner: claims.Name,

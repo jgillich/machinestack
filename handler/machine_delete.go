@@ -3,6 +3,7 @@ package handler
 import (
 	"net/http"
 
+	"github.com/faststackco/machinestack/model"
 	"github.com/go-pg/pg"
 	"github.com/labstack/echo"
 )
@@ -13,7 +14,7 @@ func (h *Handler) MachineDelete(c echo.Context) error {
 	name := c.Param("name")
 	claims := getJwtClaims(c)
 
-	var machine Machine
+	var machine model.Machine
 	if err := h.db.Model(&machine).Where("name = ?", name).Select(); err != nil {
 		if err != pg.ErrNoRows {
 			return err

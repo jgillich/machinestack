@@ -36,12 +36,3 @@ type MachineQuota struct {
 	CPU       int `json:"cpu"`
 	RAM       int `json:"ram"`
 }
-
-// Machine is a machine
-type Machine struct {
-	Name   string `json:"name"`
-	Image  string `json:"image"`
-	Driver string `json:"driver"`
-	Owner  string `json:"-"`
-	Node   string `json:"-"`
-}

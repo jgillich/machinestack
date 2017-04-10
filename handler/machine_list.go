@@ -3,6 +3,7 @@ package handler
 import (
 	"net/http"
 
+	"github.com/faststackco/machinestack/model"
 	"github.com/labstack/echo"
 )
 
@@ -11,7 +12,7 @@ func (h *Handler) MachineList(c echo.Context) error {
 
 	claims := getJwtClaims(c)
 
-	machines := []Machine{}
+	machines := []model.Machine{}
 	if err := h.db.Model(&machines).Where("owner = ?", claims.Name).Select(); err != nil {
 		return err
 	}
