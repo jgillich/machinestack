@@ -142,6 +142,13 @@ func (d *LxdDriver) Exec(name string, stdin io.ReadCloser, stdout io.WriteCloser
 		}
 	}
 
-	_, err = d.client.Exec(name, []string{"/bin/bash"}, nil, stdin, stdout, nil, controlHandlerWrapper, 80, 25)
-	return err
+	go func() {
+		// TODO exec unfortunately blocks, so we cannot receive the error
+		_, err = d.client.Exec(name, []string{"/bin/bash"}, nil, stdin, stdout, nil, controlHandlerWrapper, 80, 25)
+		if err != nil {
+			panic(err)
+		}
+	}()
+
+	return nil
 }
