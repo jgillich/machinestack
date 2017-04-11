@@ -1,5 +1,5 @@
 {
-    "memo": "ce0b50dfbe275604bb75fac604fe87aca3eb38969d66739d8c21e9d2c3174a5f",
+    "memo": "7b1f03552f1e35bcb947635a9ae647d6e2a70490e13e1243e1c28f3a56a521d1",
     "projects": [
         {
             "name": "github.com/armon/go-radix",
@@ -29,6 +29,14 @@
             "name": "github.com/dgrijalva/jwt-go",
             "branch": "master",
             "revision": "2268707a8f0843315e2004ee4f1d021dc08baedf",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/go-pg/migrations",
+            "version": "v6.0.2",
+            "revision": "327e262afb5c632d5aada01953c4307943cb2180",
             "packages": [
                 "."
             ]
@@ -65,7 +73,7 @@
         {
             "name": "github.com/hashicorp/consul",
             "branch": "master",
-            "revision": "3ef7dde64c27e015c61be5e08c3ca55199726b1a",
+            "revision": "5dd90404169688d7bd2b667d49fe06a42892a7be",
             "packages": [
                 "api"
             ]
@@ -137,7 +145,7 @@
         {
             "name": "github.com/labstack/echo",
             "branch": "master",
-            "revision": "62ab217b8c7d114b1b7bd8c877edaa702149cd2f",
+            "revision": "9cd74c54c1619a4e77353118937b5055c1c5b5a7",
             "packages": [
                 ".",
                 "middleware"
@@ -157,12 +165,13 @@
         {
             "name": "github.com/lxc/lxd",
             "branch": "master",
-            "revision": "f0f838c53d2e4abf90e8b372cb3b16cba74436a9",
+            "revision": "1895ece5aa5df569d2afe9604de18643fcdb7f25",
             "packages": [
                 ".",
                 "shared",
                 "shared/api",
                 "shared/ioprogress",
+                "shared/logger",
                 "shared/osarch",
                 "shared/simplestreams",
                 "shared/version"
@@ -235,7 +244,7 @@
         {
             "name": "golang.org/x/crypto",
             "branch": "master",
-            "revision": "6022e334c1a8cce46fb30629dc30e835faa3844d",
+            "revision": "9ef620b9ca2f82b55030ffd4f41327fa9e77a92c",
             "packages": [
                 "acme",
                 "acme/autocert"

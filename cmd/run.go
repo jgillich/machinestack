@@ -1,38 +1,17 @@
-package main
+package cmd
 
 import (
-	"log"
-	"os"
-
 	"flag"
 	"fmt"
 
+	"github.com/faststackco/machinestack/api"
 	"github.com/faststackco/machinestack/config"
 	"github.com/mitchellh/cli"
 )
 
-func main() {
-	c := cli.NewCLI("api", "1.0.0")
-	c.Args = os.Args[1:]
-
-	c.Commands = map[string]cli.CommandFactory{
-		"": func() (cli.Command, error) {
-			return RunCommand{cli: c}, nil
-		},
-	}
-
-	exitStatus, err := c.Run()
-	if err != nil {
-		log.Println(err)
-	}
-
-	os.Exit(exitStatus)
-
-}
-
-// RunCommand nolint
+// RunCommand is the default command that runs the server
 type RunCommand struct {
-	cli *cli.CLI
+	Cli *cli.CLI
 }
 
 // Run nolint
@@ -45,7 +24,7 @@ func (c RunCommand) Run(args []string) int {
 		return 1
 	}
 
-	a, err := NewServer(cfg)
+	a, err := api.NewServer(cfg)
 	if err != nil {
 		fmt.Println(err)
 		return 1
@@ -60,7 +39,7 @@ func (c RunCommand) Run(args []string) int {
 
 // Help nolint
 func (c RunCommand) Help() string {
-	return c.cli.HelpFunc(c.cli.Commands) + "\n"
+	return c.Cli.HelpFunc(c.Cli.Commands) + "\n"
 }
 
 // Synopsis nolint

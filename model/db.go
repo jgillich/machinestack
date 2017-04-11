@@ -5,7 +5,6 @@ import (
 
 	"github.com/faststackco/machinestack/config"
 	"github.com/go-pg/pg"
-	"github.com/go-pg/pg/orm"
 )
 
 // Db creates a database connection and applies migrations
@@ -19,14 +18,6 @@ func Db(config *config.PostgresConfig) (*pg.DB, error) {
 		PoolTimeout: time.Second * 5,
 		ReadTimeout: time.Second * 5,
 	})
-
-	for _, model := range []interface{}{&Machine{}} {
-		if err := db.CreateTable(model, &orm.CreateTableOptions{
-			Temp: true, // TODO remove temp, use migrations
-		}); err != nil {
-			return nil, err
-		}
-	}
 
 	return db, nil
 }

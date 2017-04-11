@@ -3,6 +3,9 @@
         "github.com/dgrijalva/jwt-go": {
             "branch": "master"
         },
+        "github.com/go-pg/migrations": {
+            "branch": "master"
+        },
         "github.com/go-pg/pg": {
             "branch": "master"
         },

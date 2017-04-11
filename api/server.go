@@ -1,10 +1,9 @@
-package main
+package api
 
 import (
 	"strings"
 
 	"github.com/faststackco/machinestack/config"
-	"github.com/faststackco/machinestack/handler"
 	"github.com/faststackco/machinestack/model"
 	"github.com/faststackco/machinestack/scheduler"
 	"github.com/labstack/echo"
@@ -30,7 +29,7 @@ func NewServer(config *config.Config) (*Server, error) {
 		return nil, err
 	}
 
-	hand := handler.NewHandler(db, sched)
+	hand := NewHandler(db, sched)
 
 	e := echo.New()
 
@@ -57,7 +56,7 @@ func NewServer(config *config.Config) (*Server, error) {
 			return false
 		},
 		SigningKey: []byte(config.JwtConfig.Secret),
-		Claims:     &handler.JwtClaims{},
+		Claims:     &JwtClaims{},
 	}))
 
 	e.GET("/machines", hand.MachineList)
