@@ -6,6 +6,8 @@ import (
 
 	"github.com/faststackco/machinestack/config"
 	"github.com/faststackco/machinestack/model"
+	// Required for migrations to be picked up
+	_ "github.com/faststackco/machinestack/model/migrations"
 	"github.com/go-pg/migrations"
 	"github.com/mitchellh/cli"
 )
@@ -31,11 +33,13 @@ func (c MigrateCommand) Run(args []string) int {
 		return 1
 	}
 
-	_, _, err = migrations.Run(db, args...)
+	old, new, err := migrations.Run(db, args...)
 	if err != nil {
 		fmt.Println(err)
 		return 1
 	}
+
+	fmt.Printf("Migrated: %v -> %v", old, new)
 
 	return 0
 }

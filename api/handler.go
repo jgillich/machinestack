@@ -30,7 +30,7 @@ func getJwtClaims(c echo.Context) *JwtClaims {
 	return c.Get("user").(*jwt.Token).Claims.(*JwtClaims)
 }
 
-// MachineQuota defines how many instances a user can create, and how many cores and GB RAM is assigned
+// MachineQuota defines limits for a user
 type MachineQuota struct {
 	Instances int `json:"instances"`
 	CPU       int `json:"cpu"`
