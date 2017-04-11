@@ -16,7 +16,12 @@ func (h *Handler) ExecControl(c echo.Context) error {
 		return Error(c, http.StatusNotFound, "exec '%s' not found", id)
 	}
 
-	upgrader := websocket.Upgrader{}
+	upgrader := websocket.Upgrader{
+		CheckOrigin: func(r *http.Request) bool {
+			// TODO
+			return true
+		},
+	}
 
 	conn, err := upgrader.Upgrade(c.Response(), c.Request(), nil)
 	if err != nil {

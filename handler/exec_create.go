@@ -13,14 +13,19 @@ import (
 )
 
 var (
-	execs map[string]exec
+	execs = make(map[string]exec)
 )
 
 type exec struct {
-	stdin   io.WriteCloser
-	stdout  io.ReadCloser
+	w       io.WriteCloser
+	r       io.ReadCloser
 	control chan driver.ControlMessage
 	created time.Time
+}
+
+// ExecCreateResponse defines the data structure of a ExecCreate response
+type ExecCreateResponse struct {
+	ID string `json:"id"`
 }
 
 // ExecCreate creates a new exec session
@@ -45,16 +50,18 @@ func (h *Handler) ExecCreate(c echo.Context) error {
 	outr, outw := io.Pipe()
 	control := make(chan driver.ControlMessage)
 
-	h.sched.Exec(machine.Name, machine.Driver, machine.Node, inr, outw, control)
+	if err := h.sched.Exec(machine.Name, machine.Driver, machine.Node, inr, outw, control); err != nil {
+		return err
+	}
 
 	id := uuid.New().String()
 
 	execs[id] = exec{
-		stdin:   inw,
-		stdout:  outr,
+		w:       inw,
+		r:       outr,
 		control: control,
 		created: time.Now(),
 	}
 
-	return c.String(http.StatusCreated, id)
+	return Data(c, http.StatusCreated, ExecCreateResponse{ID: id})
 }

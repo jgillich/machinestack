@@ -1,6 +1,8 @@
 package main
 
 import (
+	"strings"
+
 	"github.com/faststackco/machinestack/config"
 	"github.com/faststackco/machinestack/handler"
 	"github.com/faststackco/machinestack/model"
@@ -18,7 +20,6 @@ type Server struct {
 
 // NewServer creates a new Server
 func NewServer(config *config.Config) (*Server, error) {
-
 	db, err := model.Db(config.PostgresConfig)
 	if err != nil {
 		return nil, err
@@ -49,6 +50,12 @@ func NewServer(config *config.Config) (*Server, error) {
 	e.Use(middleware.Gzip())
 
 	e.Use(middleware.JWTWithConfig(middleware.JWTConfig{
+		Skipper: func(e echo.Context) bool {
+			if strings.HasPrefix(e.Path(), "/exec") {
+				return true
+			}
+			return false
+		},
 		SigningKey: []byte(config.JwtConfig.Secret),
 		Claims:     &handler.JwtClaims{},
 	}))

@@ -111,6 +111,19 @@ func (d *LxdDriver) Delete(name string) error {
 // Exec creates a new exec session
 func (d *LxdDriver) Exec(name string, stdin io.ReadCloser, stdout io.WriteCloser, control chan ControlMessage) error {
 
+	container, err := d.client.ContainerInfo(name)
+	if err != nil {
+		return err
+	}
+
+	if container.StatusCode == api.Stopped {
+		if resp, err := d.client.Action(name, shared.Start, -1, false, false); err != nil {
+			return err
+		} else if err := d.client.WaitForSuccess(resp.Operation); err != nil {
+			return err
+		}
+	}
+
 	controlHandlerWrapper := func(c *lxd.Client, conn *websocket.Conn) {
 		for msg := range control {
 
@@ -129,7 +142,6 @@ func (d *LxdDriver) Exec(name string, stdin io.ReadCloser, stdout io.WriteCloser
 		}
 	}
 
-	_, err := d.client.Exec(name, []string{"/bin/bash"}, nil, stdin, stdout, nil, controlHandlerWrapper, 80, 25)
-
+	_, err = d.client.Exec(name, []string{"/bin/bash"}, nil, stdin, stdout, nil, controlHandlerWrapper, 80, 25)
 	return err
 }

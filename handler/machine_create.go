@@ -37,12 +37,10 @@ func (h *Handler) MachineCreate(c echo.Context) error {
 		return err
 	}
 
-	if err = h.db.Insert(&model.Machine{
-		Name:  machine.Name,
-		Image: machine.Image,
-		Owner: claims.Name,
-		Node:  node,
-	}); err != nil {
+	machine.Node = node
+	machine.Owner = claims.Name
+
+	if err = h.db.Insert(&machine); err != nil {
 		// TODO machine still exists here, what to do?
 		return err
 	}
