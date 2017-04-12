@@ -31,7 +31,7 @@ func (h *Handler) ExecControl(c echo.Context) error {
 
 	for {
 		var msg driver.ControlMessage
-		if err := conn.ReadJSON(msg); err != nil {
+		if err := conn.ReadJSON(&msg); err != nil {
 			return nil
 		}
 

@@ -1,7 +1,6 @@
 package driver
 
 import (
-	"encoding/json"
 	"errors"
 
 	"io"
@@ -126,19 +125,9 @@ func (d *LxdDriver) Exec(name string, stdin io.ReadCloser, stdout io.WriteCloser
 
 	controlHandlerWrapper := func(c *lxd.Client, conn *websocket.Conn) {
 		for msg := range control {
-
-			w, err := conn.NextWriter(websocket.TextMessage)
-			if err != nil {
+			if err := conn.WriteJSON(msg); err != nil {
 				return // TODO log
 			}
-
-			buf, err := json.Marshal(msg)
-			if err != nil {
-				return // TODO log
-			}
-			_, err = w.Write(buf)
-
-			w.Close()
 		}
 	}
 
