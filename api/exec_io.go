@@ -30,8 +30,6 @@ func (h *Handler) ExecIO(c echo.Context) error {
 	}
 	defer conn.Close()
 
-	//r, w := io.Pipe()
-
 	go writePump(e.r, conn)
 	readPump(e.w, conn)
 

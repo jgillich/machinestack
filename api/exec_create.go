@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/dchest/uniuri"
 	"github.com/faststackco/machinestack/driver"
 	"github.com/faststackco/machinestack/model"
 	"github.com/go-pg/pg"
-	"github.com/google/uuid"
 	"github.com/labstack/echo"
 )
 
@@ -54,7 +54,7 @@ func (h *Handler) ExecCreate(c echo.Context) error {
 		return err
 	}
 
-	id := uuid.New().String()
+	id := uniuri.New()
 
 	execs[id] = exec{
 		w:       inw,
