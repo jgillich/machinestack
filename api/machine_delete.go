@@ -30,7 +30,7 @@ func (h *Handler) MachineDelete(c echo.Context) error {
 		return err
 	}
 
-	if err := h.db.Delete(machine); err != nil {
+	if err := h.db.Delete(&machine); err != nil {
 		return err
 	}
 
