@@ -3,9 +3,9 @@ package api
 import (
 	"net/http"
 
-	"github.com/faststackco/machinestack/model"
 	"github.com/go-pg/pg"
 	"github.com/labstack/echo"
+	"gitlab.com/faststack/machinestack/model"
 )
 
 // MachineDelete deletes a machine

@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/dchest/uniuri"
-	"github.com/faststackco/machinestack/driver"
-	"github.com/faststackco/machinestack/model"
+	"gitlab.com/faststack/machinestack/driver"
+	"gitlab.com/faststack/machinestack/model"
 	"github.com/go-pg/pg"
 	"github.com/labstack/echo"
 )

@@ -3,8 +3,8 @@ package scheduler
 import (
 	"testing"
 
-	"github.com/faststackco/machinestack/config"
-	"github.com/faststackco/machinestack/driver"
+	"gitlab.com/faststack/machinestack/config"
+	"gitlab.com/faststack/machinestack/driver"
 	"github.com/stretchr/testify/assert"
 )
 

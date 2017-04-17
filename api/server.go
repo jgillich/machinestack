@@ -3,9 +3,9 @@ package api
 import (
 	"strings"
 
-	"github.com/faststackco/machinestack/config"
-	"github.com/faststackco/machinestack/model"
-	"github.com/faststackco/machinestack/scheduler"
+	"gitlab.com/faststack/machinestack/config"
+	"gitlab.com/faststack/machinestack/model"
+	"gitlab.com/faststack/machinestack/scheduler"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )

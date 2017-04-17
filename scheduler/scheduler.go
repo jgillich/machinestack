@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/faststackco/machinestack/config"
-	"github.com/faststackco/machinestack/driver"
+	"gitlab.com/faststack/machinestack/config"
+	"gitlab.com/faststack/machinestack/driver"
 )
 
 // Scheduler is what distirbutes Driver requests

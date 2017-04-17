@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/faststackco/machinestack/config"
+	"gitlab.com/faststack/machinestack/config"
 	"github.com/lxc/lxd/shared/api"
 )
 

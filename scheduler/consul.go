@@ -5,8 +5,8 @@ import (
 	"io"
 	"strconv"
 
-	"github.com/faststackco/machinestack/config"
-	"github.com/faststackco/machinestack/driver"
+	"gitlab.com/faststack/machinestack/config"
+	"gitlab.com/faststack/machinestack/driver"
 	"github.com/hashicorp/consul/api"
 	"github.com/jmcvetta/randutil"
 )

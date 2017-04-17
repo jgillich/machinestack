@@ -3,7 +3,7 @@ package model
 import (
 	"time"
 
-	"github.com/faststackco/machinestack/config"
+	"gitlab.com/faststack/machinestack/config"
 	"github.com/go-pg/pg"
 )
 

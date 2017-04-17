@@ -3,7 +3,7 @@ package api
 import (
 	"net/http"
 
-	"github.com/faststackco/machinestack/driver"
+	"gitlab.com/faststack/machinestack/driver"
 	"github.com/gorilla/websocket"
 	"github.com/labstack/echo"
 )

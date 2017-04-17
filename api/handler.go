@@ -2,7 +2,7 @@ package api
 
 import (
 	jwt "github.com/dgrijalva/jwt-go"
-	"github.com/faststackco/machinestack/scheduler"
+	"gitlab.com/faststack/machinestack/scheduler"
 	"github.com/go-pg/pg"
 	"github.com/labstack/echo"
 )

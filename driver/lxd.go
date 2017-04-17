@@ -7,7 +7,7 @@ import (
 
 	"fmt"
 
-	"github.com/faststackco/machinestack/config"
+	"gitlab.com/faststack/machinestack/config"
 	"github.com/gorilla/websocket"
 	"github.com/lxc/lxd"
 	"github.com/lxc/lxd/shared"

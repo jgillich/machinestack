@@ -4,10 +4,10 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/faststackco/machinestack/config"
-	"github.com/faststackco/machinestack/model"
+	"gitlab.com/faststack/machinestack/config"
+	"gitlab.com/faststack/machinestack/model"
 	// Required for migrations to be picked up
-	_ "github.com/faststackco/machinestack/model/migrations"
+	_ "gitlab.com/faststack/machinestack/model/migrations"
 	"github.com/go-pg/migrations"
 	"github.com/mitchellh/cli"
 )

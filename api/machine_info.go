@@ -3,7 +3,7 @@ package api
 import (
 	"net/http"
 
-	"github.com/faststackco/machinestack/model"
+	"gitlab.com/faststack/machinestack/model"
 	"github.com/go-pg/pg"
 	"github.com/labstack/echo"
 )

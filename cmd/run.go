@@ -4,8 +4,8 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/faststackco/machinestack/api"
-	"github.com/faststackco/machinestack/config"
+	"gitlab.com/faststack/machinestack/api"
+	"gitlab.com/faststack/machinestack/config"
 	"github.com/mitchellh/cli"
 )
 

@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/faststackco/machinestack/cmd"
+	"gitlab.com/faststack/machinestack/cmd"
 	"github.com/mitchellh/cli"
 )
 
