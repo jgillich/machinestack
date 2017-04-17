@@ -47,6 +47,7 @@ func readPump(w io.WriteCloser, conn *websocket.Conn) {
 		}
 
 		if _, err := w.Write(message); err != nil {
+			conn.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseGoingAway, "broken write pipe"))
 			return
 		}
 	}
@@ -58,6 +59,7 @@ func writePump(r io.ReadCloser, conn *websocket.Conn) {
 
 		n, err := r.Read(p)
 		if err != nil {
+			conn.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseGoingAway, "broken read pipe"))
 			return
 		}
 
