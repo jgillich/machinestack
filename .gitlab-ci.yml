@@ -1,0 +1,45 @@
+image: golang:latest
+
+services:
+  - postgres:latest
+
+
+variables:
+  POSTGRES_ADDR: postgres
+  POSTGRES_DB: test
+  POSTGRES_USER: test
+  POSTGRES_PASSWORD: test
+
+cache:
+  paths:
+    - vendor
+
+before_script:
+  - ln -s /builds /go/src/gitlab.com
+  - cd /go/src/gitlab.com/faststack/machinestack
+
+stages:
+  - prepare
+  - test
+  - build
+
+gopkg:
+  stage: prepare
+  script:
+    - go get -u github.com/golang/dep/...
+    - dep ensure
+
+lint:
+  stage: test
+  script:
+    - go get -u github.com/golang/lint/golint
+    - golint $(go list ./... | grep -v /vendor/)
+    - go test $(go list ./... | grep -v /vendor/)
+
+compile:
+  stage: build
+  script:
+    - go build
+  artifacts:
+    paths:
+      - machinestack

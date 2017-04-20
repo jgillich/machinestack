@@ -42,6 +42,11 @@ var (
 		Title:  "Access denied",
 		Detail: "You are not allowed to perform the requested action.",
 	}
+	// ValidationFailedError is returned when request did not pass validation
+	ValidationFailedError = &jsonapi.ErrorObject{
+		Code:  "validation_failed",
+		Title: "Request validation failed",
+	}
 	logger, _ = zap.NewProduction()
 )
 
@@ -101,7 +106,7 @@ func (h *Handler) Serve(addr string) error {
 
 	router := httprouter.New()
 	router.HandlerFunc("POST", "/machines", h.MachineCreate)
-	router.POST("/delete/:name", h.MachineDelete)
+	router.DELETE("/machines/:name", h.MachineDelete)
 	router.GET("/machines/:name", h.MachineInfo)
 	router.POST("/machines/:name/session", h.SessionCreate)
 	router.GET("/session/:id/io", h.SessionIO)

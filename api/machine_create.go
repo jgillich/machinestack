@@ -7,6 +7,7 @@ import (
 
 	"go.uber.org/zap"
 
+	"github.com/asaskevich/govalidator"
 	jwt "github.com/dgrijalva/jwt-go"
 
 	"github.com/google/jsonapi"
@@ -51,6 +52,14 @@ func (h *Handler) MachineCreate(w http.ResponseWriter, r *http.Request) {
 	machine := new(model.Machine)
 	if err := jsonapi.UnmarshalPayload(r.Body, machine); err != nil {
 		WriteOneError(w, http.StatusBadRequest, BadRequestError)
+		return
+	}
+
+	_, err := govalidator.ValidateStruct(machine)
+	if err != nil {
+		e := *ValidationFailedError
+		e.Detail = err.Error()
+		WriteOneError(w, http.StatusBadRequest, &e)
 		return
 	}
 
