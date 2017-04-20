@@ -1,49 +1,85 @@
 package api
 
 import (
+	"errors"
+	"fmt"
 	"net/http"
 
+	"go.uber.org/zap"
+
+	jwt "github.com/dgrijalva/jwt-go"
+
+	"github.com/google/jsonapi"
 	"gitlab.com/faststack/machinestack/driver"
 	"gitlab.com/faststack/machinestack/model"
-	"github.com/labstack/echo"
+)
+
+var (
+	// QuotaExceededError is returned when the machine limit for a user is reached
+	QuotaExceededError = &jsonapi.ErrorObject{
+		Code:   "machine_quota_exceeded",
+		Title:  "Machine quota exceeded",
+		Detail: "You have reached your limit of machines you are allowed to create.",
+	}
+	// MachineNameTakenError is returned when the machine name is taken
+	MachineNameTakenError = &jsonapi.ErrorObject{
+		Code:   "machine_name_taken",
+		Title:  "Machine name is taken",
+		Detail: "Please choose a different name.",
+	}
 )
 
 // MachineCreate creates a new machine
-func (h *Handler) MachineCreate(c echo.Context) error {
+func (h *Handler) MachineCreate(w http.ResponseWriter, r *http.Request) {
 
-	claims := getJwtClaims(c)
+	claims := r.Context().Value("user").(jwt.Token).Claims.(jwt.MapClaims)
+	quotas, ok := claims["machine_quota"].(map[string]int)
 
-	if count, err := h.db.Model(&model.Machine{}).Where("owner = ?", claims.Name).Count(); err != nil {
-		return err
-	} else if count >= claims.MachineQuota.Instances {
-		return Error(c, http.StatusForbidden, "quota exceeded")
+	if !ok {
+		WriteInternalError(w, "machine create: invalid machine_quota format", errors.New(""))
+		return
+	}
+
+	if count, err := h.DB.Model(&model.Machine{}).Where("owner = ?", claims["name"]).Count(); err != nil {
+		WriteInternalError(w, "machine create: db error", err)
+		return
+	} else if count >= quotas["instances"] {
+		WriteOneError(w, http.StatusForbidden, QuotaExceededError)
+		return
 	}
 
 	machine := new(model.Machine)
-	if err := c.Bind(machine); err != nil {
-		return err
+	if err := jsonapi.UnmarshalPayload(r.Body, machine); err != nil {
+		WriteOneError(w, http.StatusBadRequest, BadRequestError)
+		return
 	}
 
-	if count, err := h.db.Model(&model.Machine{}).Where("name = ?", machine.Name).Count(); err != nil {
-		return err
+	if count, err := h.DB.Model(&model.Machine{}).Where("name = ?", machine.Name).Count(); err != nil {
+		WriteInternalError(w, "machine create: db error", err)
+		return
 	} else if count > 0 {
-		return Error(c, http.StatusForbidden, "machine with name '%s' exists", machine.Name)
+		WriteOneError(w, http.StatusForbidden, MachineNameTakenError)
+		return
 	}
 
-	attrs := driver.MachineAttributes{CPU: claims.MachineQuota.CPU, RAM: claims.MachineQuota.RAM}
+	attrs := driver.MachineAttributes{CPU: quotas["cpu"], RAM: quotas["ram"]}
 
-	node, err := h.sched.Create(machine.Name, machine.Image, machine.Driver, attrs)
+	node, err := h.Scheduler.Create(machine.Name, machine.Image, machine.Driver, attrs)
 	if err != nil {
-		return err
+		WriteInternalError(w, "machine create: scheduler error", err)
+		return
 	}
 
 	machine.Node = node
-	machine.Owner = claims.Name
+	machine.Owner = claims["id"].(int64)
 
-	if err = h.db.Insert(&machine); err != nil {
-		// TODO machine still exists here, what to do?
-		return err
+	if err = h.DB.Insert(&machine); err != nil {
+		WriteInternalError(w, "machine create: db error", err)
+		if err = h.Scheduler.Delete(machine.Name, machine.Driver, node); err != nil {
+			logger.Error(fmt.Sprintf("machine create: cleanup of '%s' on node '%s' failed", machine.Name, node), zap.Error(err))
+		}
+		return
 	}
 
-	return Message(c, http.StatusCreated, "created")
+	w.WriteHeader(http.StatusCreated)
 }

@@ -3,36 +3,41 @@ package api
 import (
 	"net/http"
 
+	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/go-pg/pg"
-	"github.com/labstack/echo"
+	"github.com/julienschmidt/httprouter"
 	"gitlab.com/faststack/machinestack/model"
 )
 
 // MachineDelete deletes a machine
-func (h *Handler) MachineDelete(c echo.Context) error {
-
-	name := c.Param("name")
-	claims := getJwtClaims(c)
+func (h *Handler) MachineDelete(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	name := params.ByName("name")
+	claims := r.Context().Value("user").(jwt.Token).Claims.(jwt.MapClaims)
 
 	var machine model.Machine
-	if err := h.db.Model(&machine).Where("name = ?", name).Select(); err != nil {
+	if err := h.DB.Model(&machine).Where("name = ?", name).Select(); err != nil {
 		if err != pg.ErrNoRows {
-			return err
+			WriteInternalError(w, "session delete: db error", err)
+			return
 		}
-		return Error(c, http.StatusNotFound, "machine '%s' was not found", name)
+		WriteOneError(w, http.StatusNotFound, ResourceNotFoundError)
+		return
 	}
 
-	if machine.Owner != claims.Name {
-		return Error(c, http.StatusBadRequest, "machine '%s' is not owned by '%s'", name, claims.Name)
+	if machine.Owner != claims["id"] {
+		WriteOneError(w, http.StatusUnauthorized, AccessDeniedError)
+		return
 	}
 
-	if err := h.sched.Delete(name, machine.Driver, machine.Node); err != nil {
-		return err
+	if err := h.Scheduler.Delete(name, machine.Driver, machine.Node); err != nil {
+		WriteInternalError(w, "machine delete: delete failed", err)
+		return
 	}
 
-	if err := h.db.Delete(&machine); err != nil {
-		return err
+	if err := h.DB.Delete(&machine); err != nil {
+		WriteInternalError(w, "machine delete: db error", err)
+		return
 	}
 
-	return Message(c, http.StatusOK, "deleted")
+	w.WriteHeader(http.StatusOK)
 }

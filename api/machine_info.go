@@ -3,28 +3,31 @@ package api
 import (
 	"net/http"
 
-	"gitlab.com/faststack/machinestack/model"
+	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/go-pg/pg"
-	"github.com/labstack/echo"
+	"github.com/julienschmidt/httprouter"
+	"gitlab.com/faststack/machinestack/model"
 )
 
 // MachineInfo return info about a machine
-func (h *Handler) MachineInfo(c echo.Context) error {
-
-	name := c.Param("name")
-	claims := getJwtClaims(c)
+func (h *Handler) MachineInfo(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	name := params.ByName("name")
+	claims := r.Context().Value("user").(jwt.Token).Claims.(jwt.MapClaims)
 
 	var machine model.Machine
-	if err := h.db.Model(&machine).Where("name = ?", name).Select(); err != nil {
+	if err := h.DB.Model(&machine).Where("name = ?", name).Select(); err != nil {
 		if err != pg.ErrNoRows {
-			return err
+			WriteInternalError(w, "session info: db error", err)
+			return
 		}
-		return Error(c, http.StatusNotFound, "machine '%s' was not found", name)
+		WriteOneError(w, http.StatusNotFound, ResourceNotFoundError)
+		return
 	}
 
-	if machine.Owner != claims.Name {
-		return Error(c, http.StatusBadRequest, "machine '%s' is not owned by '%s'", name, claims.Name)
+	if machine.Owner != claims["id"] {
+		WriteOneError(w, http.StatusUnauthorized, AccessDeniedError)
+		return
 	}
 
-	return Data(c, http.StatusOK, machine)
+	WriteOne(w, http.StatusOK, machine)
 }

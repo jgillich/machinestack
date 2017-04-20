@@ -2,10 +2,10 @@ package model
 
 // Machine is a machine, obviously
 type Machine struct {
-	ID     int64  `json:"id"`
-	Name   string `json:"name"`
-	Image  string `json:"image"`
-	Driver string `json:"driver"`
-	Owner  string `json:"-"`
-	Node   string `json:"-"`
+	ID     int64  `jsonapi:"primary,machines"`
+	Name   string `jsonapi:"attr,name"`
+	Image  string `jsonapi:"attr,image"`
+	Driver string `jsonapi:"attr,driver"`
+	Owner  int64
+	Node   string
 }

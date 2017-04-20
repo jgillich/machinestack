@@ -5,16 +5,16 @@ import (
 	"net/http"
 
 	"github.com/gorilla/websocket"
-	"github.com/labstack/echo"
+	"github.com/julienschmidt/httprouter"
 )
 
-// ExecIO exposes stdin and stdout
-func (h *Handler) ExecIO(c echo.Context) error {
-
-	id := c.Param("id")
+// SessionIO exposes the io socket
+func (h *Handler) SessionIO(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	id := params.ByName("id")
 	e, ok := execs[id]
 	if !ok {
-		return Error(c, http.StatusNotFound, "exec '%s' not found", id)
+		WriteOneError(w, http.StatusNotFound, ResourceNotFoundError)
+		return
 	}
 
 	upgrader := websocket.Upgrader{
@@ -24,16 +24,15 @@ func (h *Handler) ExecIO(c echo.Context) error {
 		},
 	}
 
-	conn, err := upgrader.Upgrade(c.Response(), c.Request(), nil)
+	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		return err
+		WriteInternalError(w, "session io: error upgrading connection", err)
+		return
 	}
 	defer conn.Close()
 
 	go writePump(e.r, conn)
 	readPump(e.w, conn)
-
-	return nil
 }
 
 func readPump(w io.WriteCloser, conn *websocket.Conn) {
