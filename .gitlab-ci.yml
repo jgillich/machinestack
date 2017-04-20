@@ -3,7 +3,6 @@ image: golang:latest
 services:
   - postgres:latest
 
-
 variables:
   POSTGRES_ADDR: postgres
   POSTGRES_DB: test

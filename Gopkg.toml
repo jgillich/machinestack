@@ -1,0 +1,80 @@
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/asaskevich/govalidator"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/auth0/go-jwt-middleware"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/dchest/uniuri"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/dgrijalva/jwt-go"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/go-pg/migrations"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/go-pg/pg"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/google/jsonapi"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/gorilla/websocket"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/hashicorp/consul"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/hashicorp/go-multierror"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/hashicorp/hcl"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/jmcvetta/randutil"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/julienschmidt/httprouter"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/lxc/lxd"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/mitchellh/cli"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/mitchellh/mapstructure"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/rs/cors"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/stretchr/testify"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/urfave/negroni"
+
+[[dependencies]]
+  branch = "master"
+  name = "go.uber.org/zap"
