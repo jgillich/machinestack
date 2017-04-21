@@ -6,10 +6,22 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"gitlab.com/faststack/machinestack/model"
+
 	"github.com/julienschmidt/httprouter"
 )
 
 func TestMachineDelete(t *testing.T) {
+	machine := model.Machine{
+		Name:   "TestMachineDelete",
+		Image:  "ubuntu/trusty",
+		Driver: "lxd",
+	}
+
+	if err := testDB.Insert(&machine); err != nil {
+		t.Fatal(err)
+	}
+
 	mockScheduler.Machines["TestMachineDelete"] = "node"
 
 	r, err := http.NewRequest("DELETE", "/machines/TestMachineDelete", nil)

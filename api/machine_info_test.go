@@ -21,6 +21,10 @@ func TestMachineInfo(t *testing.T) {
 		Driver: "lxd",
 	}
 
+	if err := testDB.Insert(&machine); err != nil {
+		t.Fatal(err)
+	}
+
 	payload, _ := jsonapi.MarshalOne(&machine)
 	buf, _ := json.Marshal(payload)
 
