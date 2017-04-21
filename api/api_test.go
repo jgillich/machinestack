@@ -3,12 +3,14 @@ package api
 import (
 	"testing"
 
+	"gitlab.com/faststack/machinestack/model"
 	"gitlab.com/faststack/machinestack/scheduler"
 
 	"os"
 
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/go-pg/pg"
+	"github.com/go-pg/pg/orm"
 )
 
 var (
@@ -30,9 +32,9 @@ func TestMain(m *testing.M) {
 		Database: os.Getenv("POSTGRES_DB"),
 	})
 
-	if _, err := testDB.Query(nil, "TRUNCATE TABLE machines;"); err != nil {
-		panic(err)
-	}
+	testDB.CreateTable(&model.Machine{}, &orm.CreateTableOptions{
+		Temp: true,
+	})
 
 	testHandler = &Handler{
 		DB:           testDB,
