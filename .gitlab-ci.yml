@@ -4,7 +4,7 @@ services:
   - postgres:latest
 
 variables:
-  POSTGRES_ADDR: postgres
+  POSTGRES_ADDR: postgres:5432
   POSTGRES_DB: test
   POSTGRES_USER: test
   POSTGRES_PASSWORD: test
