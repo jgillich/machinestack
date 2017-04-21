@@ -40,7 +40,7 @@ lint:
 test:
   stage: test
   script:
-    - go test $(go list ./... | grep -v "vendor\|driver")
+    - go test $(go list ./... | grep -v "vendor\|driver\|scheduler")
 
 build:
   stage: build
