@@ -33,7 +33,7 @@ lint:
   script:
     - go get -u github.com/golang/lint/golint
     - golint $(go list ./... | grep -v /vendor/)
-    - go test $(go list ./... | grep -v /vendor/)
+    - go test $(go list ./... | grep -v /vendor|driver/)
 
 compile:
   stage: build
