@@ -80,7 +80,7 @@ func (h *Handler) MachineCreate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	machine.Node = node
-	machine.Owner = claims["id"].(int64)
+	machine.User = claims["id"].(int)
 
 	if err = h.DB.Insert(&machine); err != nil {
 		WriteInternalError(w, "machine create: db error", err)
