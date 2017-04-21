@@ -11,7 +11,7 @@ variables:
 
 cache:
   paths:
-    - vendor
+    - vendor/
 
 before_script:
   - ln -s /builds /go/src/gitlab.com
@@ -27,6 +27,9 @@ dep:
   script:
     - go get -u github.com/golang/dep/...
     - dep ensure
+  artifacts:
+    paths:
+      - vendor/
 
 lint:
   stage: test
