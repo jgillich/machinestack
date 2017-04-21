@@ -5,11 +5,10 @@ import (
 	"fmt"
 
 	"gitlab.com/faststack/machinestack/config"
-	"gitlab.com/faststack/machinestack/model"
 	// Required for migrations to be picked up
-	_ "gitlab.com/faststack/machinestack/model/migrations"
 	"github.com/go-pg/migrations"
 	"github.com/mitchellh/cli"
+	_ "gitlab.com/faststack/machinestack/model/migrations"
 )
 
 // MigrateCommand applies migrations
@@ -27,11 +26,7 @@ func (c MigrateCommand) Run(args []string) int {
 		return 1
 	}
 
-	db, err := model.Db(cfg.PostgresConfig)
-	if err != nil {
-		fmt.Println(err)
-		return 1
-	}
+	db := cfg.PostgresConfig.Connect()
 
 	old, new, err := migrations.Run(db, args...)
 	if err != nil {

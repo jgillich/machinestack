@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/go-pg/pg"
 	"github.com/mitchellh/cli"
 	"gitlab.com/faststack/machinestack/api"
 	"gitlab.com/faststack/machinestack/config"
@@ -26,15 +25,7 @@ func (c RunCommand) Run(args []string) int {
 		return 1
 	}
 
-	db := pg.Connect(&pg.Options{
-		Addr:     cfg.PostgresConfig.Address,
-		User:     cfg.PostgresConfig.Username,
-		Password: cfg.PostgresConfig.Password,
-		Database: cfg.PostgresConfig.Database,
-		//PoolSize:    20,
-		//PoolTimeout: time.Second * 5,
-		//ReadTimeout: time.Second * 5,
-	})
+	db := cfg.PostgresConfig.Connect()
 
 	sched, err := scheduler.NewScheduler(cfg.SchedulerConfig.Name, &cfg.DriverConfig.Options)
 	if err != nil {

@@ -1,5 +1,7 @@
 package config
 
+import "github.com/go-pg/pg"
+
 // Config is what defines the behaviour of the api
 type Config struct {
 
@@ -52,6 +54,19 @@ type PostgresConfig struct {
 	Username string `mapstructure:"username"`
 	Password string `mapstructure:"password"`
 	Database string `mapstructure:"database"`
+}
+
+// Connect creates a new pg connection
+func (p *PostgresConfig) Connect() *pg.DB {
+	return pg.Connect(&pg.Options{
+		Addr:     p.Address,
+		User:     p.Username,
+		Password: p.Password,
+		Database: p.Database,
+		//PoolSize:    20,
+		//PoolTimeout: time.Second * 5,
+		//ReadTimeout: time.Second * 5,
+	})
 }
 
 type JwtConfig struct {
