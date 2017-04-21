@@ -4,8 +4,9 @@ import (
 	"log"
 	"os"
 
-	"github.com/mitchellh/cli"
 	"gitlab.com/faststack/machinestack/command"
+
+	"github.com/mitchellh/cli"
 )
 
 func main() {
@@ -14,10 +15,10 @@ func main() {
 
 	c.Commands = map[string]cli.CommandFactory{
 		"": func() (cli.Command, error) {
-			return cmd.RunCommand{Cli: c}, nil
+			return command.RunCommand{Cli: c}, nil
 		},
 		"migrate": func() (cli.Command, error) {
-			return cmd.MigrateCommand{Cli: c}, nil
+			return command.MigrateCommand{Cli: c}, nil
 		},
 	}
 
