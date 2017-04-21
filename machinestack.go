@@ -4,8 +4,8 @@ import (
 	"log"
 	"os"
 
-	"gitlab.com/faststack/machinestack/cmd"
 	"github.com/mitchellh/cli"
+	"gitlab.com/faststack/machinestack/command"
 )
 
 func main() {
