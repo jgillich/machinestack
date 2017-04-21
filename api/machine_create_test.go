@@ -15,7 +15,9 @@ import (
 
 func TestMachineCreate(t *testing.T) {
 	machine := model.Machine{
-		Name: "TestMachineCreate",
+		Name:   "TestMachineCreate",
+		Image:  "ubuntu/trusty",
+		Driver: "lxd",
 	}
 
 	payload, _ := jsonapi.MarshalOne(&machine)
