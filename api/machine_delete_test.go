@@ -24,8 +24,6 @@ func TestMachineDelete(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	mockScheduler.Machines["TestMachineDelete"] = "node"
-
 	r, err := http.NewRequest("DELETE", "/machines/TestMachineDelete", nil)
 	if err != nil {
 		t.Fatal(err)
