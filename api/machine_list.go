@@ -19,5 +19,5 @@ func (h *Handler) MachineList(w http.ResponseWriter, r *http.Request, params htt
 		return
 	}
 
-	WriteOne(w, http.StatusOK, machines)
+	WriteOne(w, http.StatusOK, &machines)
 }

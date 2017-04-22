@@ -18,11 +18,14 @@ func TestMachineDelete(t *testing.T) {
 		Image:  "ubuntu/trusty",
 		Driver: "lxd",
 		UserID: testToken.Claims.(jwt.MapClaims)["id"].(int),
+		Node:   "node",
 	}
 
 	if err := testDB.Insert(&machine); err != nil {
 		t.Fatal(err)
 	}
+
+	mockScheduler.Machines["TestMachineDelete"] = "node"
 
 	r, err := http.NewRequest("DELETE", "/machines/TestMachineDelete", nil)
 	if err != nil {
