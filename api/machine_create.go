@@ -41,7 +41,7 @@ func (h *Handler) MachineCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if count, err := h.DB.Model(&model.Machine{}).Where("owner = ?", claims["name"]).Count(); err != nil {
+	if count, err := h.DB.Model(&model.Machine{}).Where("user_id = ?", claims["name"]).Count(); err != nil {
 		WriteInternalError(w, "machine create: db error", err)
 		return
 	} else if count >= quotas["instances"] {

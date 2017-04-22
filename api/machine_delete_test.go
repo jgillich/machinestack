@@ -8,6 +8,7 @@ import (
 
 	"gitlab.com/faststack/machinestack/model"
 
+	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/julienschmidt/httprouter"
 )
 
@@ -16,6 +17,7 @@ func TestMachineDelete(t *testing.T) {
 		Name:   "TestMachineDelete",
 		Image:  "ubuntu/trusty",
 		Driver: "lxd",
+		UserID: testToken.Claims.(jwt.MapClaims)["id"].(int),
 	}
 
 	if err := testDB.Insert(&machine); err != nil {

@@ -9,6 +9,7 @@ import (
 	"reflect"
 	"testing"
 
+	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/google/jsonapi"
 	"github.com/julienschmidt/httprouter"
 	"gitlab.com/faststack/machinestack/model"
@@ -19,6 +20,7 @@ func TestMachineInfo(t *testing.T) {
 		Name:   "TestMachineInfo",
 		Image:  "ubuntu/trusty",
 		Driver: "lxd",
+		UserID: testToken.Claims.(jwt.MapClaims)["id"].(int),
 	}
 
 	if err := testDB.Insert(&machine); err != nil {

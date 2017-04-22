@@ -15,7 +15,7 @@ func init() {
 				name text,
 				image text,
 				driver text,
-				owner text,
+				user_id text,
 				node text,
 				PRIMARY KEY (id)
 			)
