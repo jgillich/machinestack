@@ -24,7 +24,7 @@ func (h *Handler) MachineDelete(w http.ResponseWriter, r *http.Request, params h
 		return
 	}
 
-	if machine.User != claims["id"] {
+	if machine.UserID != claims["id"] {
 		WriteOneError(w, http.StatusUnauthorized, AccessDeniedError)
 		return
 	}

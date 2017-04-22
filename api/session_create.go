@@ -45,7 +45,7 @@ func (h *Handler) SessionCreate(w http.ResponseWriter, r *http.Request, params h
 		return
 	}
 
-	if machine.User != claims["name"] {
+	if machine.UserID != claims["name"] {
 		WriteOneError(w, http.StatusUnauthorized, AccessDeniedError)
 		return
 	}
