@@ -32,9 +32,11 @@ func TestMain(m *testing.M) {
 		Database: os.Getenv("POSTGRES_DB"),
 	})
 
-	testDB.CreateTable(&model.Machine{}, &orm.CreateTableOptions{
+	if err := testDB.CreateTable(&model.Machine{}, &orm.CreateTableOptions{
 		Temp: true,
-	})
+	}); err != nil {
+		panic(err)
+	}
 
 	testHandler = &Handler{
 		DB:           testDB,
