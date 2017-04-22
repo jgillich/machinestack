@@ -47,7 +47,8 @@ var (
 		Code:  "validation_failed",
 		Title: "Request validation failed",
 	}
-	logger, _ = zap.NewProduction()
+	// TODO configurable
+	logger, _ = zap.NewDevelopment()
 )
 
 // Handler stores common types needed by the api
@@ -78,7 +79,7 @@ func WriteOneError(w http.ResponseWriter, status int, err *jsonapi.ErrorObject) 
 	w.Header().Set("Content-Type", jsonapi.MediaType)
 	w.WriteHeader(status)
 	if err := jsonapi.MarshalErrors(w, []*jsonapi.ErrorObject{err}); err != nil {
-		logger.Error("error marshalling json response", zap.Any("err", err))
+		logger.Error("error marshalling json response", zap.Error(err), zap.Any("err", err))
 	}
 }
 
@@ -87,16 +88,16 @@ func WriteOne(w http.ResponseWriter, status int, model interface{}) {
 	w.Header().Set("Content-Type", jsonapi.MediaType)
 	w.WriteHeader(status)
 	if err := jsonapi.MarshalOnePayload(w, model); err != nil {
-		logger.Error("error marshalling json response", zap.Any("model", model))
+		logger.Error("error marshalling json response", zap.Error(err), zap.Any("model", model))
 	}
 }
 
-// WriteOne returns one resource object
+// WriteMany returns a list of resource objects
 func WriteMany(w http.ResponseWriter, status int, models interface{}) {
 	w.Header().Set("Content-Type", jsonapi.MediaType)
 	w.WriteHeader(status)
 	if err := jsonapi.MarshalManyPayload(w, models); err != nil {
-		logger.Error("error marshalling json response", zap.Any("models", models))
+		logger.Error("error marshalling json response", zap.Error(err), zap.Any("models", models))
 	}
 }
 
@@ -106,7 +107,7 @@ func WriteInternalError(w http.ResponseWriter, log string, err error) {
 	w.Header().Set("Content-Type", jsonapi.MediaType)
 	w.WriteHeader(http.StatusInternalServerError)
 	if err := jsonapi.MarshalErrors(w, []*jsonapi.ErrorObject{InternalServerError}); err != nil {
-		logger.Error("error marshalling json response", zap.Any("err", InternalServerError))
+		logger.Error("error marshalling json response", zap.Error(err))
 	}
 }
 
