@@ -91,6 +91,15 @@ func WriteOne(w http.ResponseWriter, status int, model interface{}) {
 	}
 }
 
+// WriteOne returns one resource object
+func WriteMany(w http.ResponseWriter, status int, models interface{}) {
+	w.Header().Set("Content-Type", jsonapi.MediaType)
+	w.WriteHeader(status)
+	if err := jsonapi.MarshalManyPayload(w, models); err != nil {
+		logger.Error("error marshalling json response", zap.Any("models", models))
+	}
+}
+
 // WriteInternalError logs and returns an internal server error
 func WriteInternalError(w http.ResponseWriter, log string, err error) {
 	logger.Error(log, zap.Error(err))

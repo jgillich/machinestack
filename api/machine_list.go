@@ -13,11 +13,11 @@ import (
 func (h *Handler) MachineList(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	claims := r.Context().Value("user").(jwt.Token).Claims.(jwt.MapClaims)
 
-	machines := []model.Machine{}
+	var machines []model.Machine
 	if err := h.DB.Model(&machines).Where("user_id = ?", claims["id"]).Select(); err != nil {
 		WriteInternalError(w, "session info: db error", err)
 		return
 	}
 
-	WriteOne(w, http.StatusOK, &machines)
+	WriteMany(w, http.StatusOK, &machines)
 }
