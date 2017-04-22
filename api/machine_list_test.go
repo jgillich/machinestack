@@ -38,7 +38,7 @@ func TestMachineList(t *testing.T) {
 		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusOK)
 	}
 
-	var machines []model.Machine
+	var machines []*model.Machine
 	if err := jsonapi.UnmarshalPayload(rr.Body, machines); err != nil {
 		t.Fatal(err)
 	}
