@@ -40,6 +40,8 @@ func (c RunCommand) Run(args []string) int {
 		AllowOrigins: cfg.AllowOrigins,
 	}
 
+	fmt.Printf("Serving on '%v'\n", cfg.Address)
+
 	if err := handler.Serve(cfg.Address); err != nil {
 		fmt.Println(err)
 		return 1
