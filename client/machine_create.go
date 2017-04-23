@@ -1,20 +1,24 @@
 package client
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
-
-	"io"
 
 	"github.com/google/jsonapi"
 	"gitlab.com/faststack/machinestack/model"
 )
 
 func (c *Client) MachineCreate(machine *model.Machine) error {
-	reader, writer := io.Pipe()
-	if err := jsonapi.MarshalOnePayload(writer, machine); err != nil {
+	payload, err := jsonapi.MarshalOne(machine)
+	if err != nil {
 		return err
 	}
-	r, err := c.request("POST", "/machines", reader)
+
+	buf := new(bytes.Buffer)
+	json.NewEncoder(buf).Encode(payload)
+
+	r, err := c.request("POST", "/machines", buf)
 	if err != nil {
 		return err
 	}
