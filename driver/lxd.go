@@ -7,11 +7,11 @@ import (
 
 	"fmt"
 
-	"gitlab.com/faststack/machinestack/config"
 	"github.com/gorilla/websocket"
 	"github.com/lxc/lxd"
 	"github.com/lxc/lxd/shared"
 	"github.com/lxc/lxd/shared/api"
+	"gitlab.com/faststack/machinestack/config"
 )
 
 // LxdDriver implements the Driver interface for LXD
@@ -126,7 +126,7 @@ func (d *LxdDriver) Exec(name string, stdin io.ReadCloser, stdout io.WriteCloser
 	controlHandlerWrapper := func(c *lxd.Client, conn *websocket.Conn) {
 		for msg := range control {
 			if err := conn.WriteJSON(msg); err != nil {
-				return // TODO log
+				return
 			}
 		}
 	}
