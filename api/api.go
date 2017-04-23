@@ -115,7 +115,8 @@ func WriteInternalError(w http.ResponseWriter, log string, err error) {
 func (h *Handler) Serve(addr string) error {
 
 	router := httprouter.New()
-	router.HandlerFunc("POST", "/machines", h.MachineCreate)
+	router.GET("/machines", h.MachineList)
+	router.POST("/machines", h.MachineCreate)
 	router.DELETE("/machines/:name", h.MachineDelete)
 	router.GET("/machines/:name", h.MachineInfo)
 	router.POST("/machines/:name/session", h.SessionCreate)
@@ -128,6 +129,7 @@ func (h *Handler) Serve(addr string) error {
 
 	middleware.Use(cors.New(cors.Options{
 		AllowedOrigins: h.AllowOrigins,
+		AllowedHeaders: []string{"Authorization", "Content-Type"},
 	}))
 
 	jwt := jwtmiddleware.New(jwtmiddleware.Options{

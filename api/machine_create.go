@@ -9,6 +9,7 @@ import (
 
 	"github.com/asaskevich/govalidator"
 	jwt "github.com/dgrijalva/jwt-go"
+	"github.com/julienschmidt/httprouter"
 
 	"github.com/google/jsonapi"
 	"gitlab.com/faststack/machinestack/driver"
@@ -31,7 +32,7 @@ var (
 )
 
 // MachineCreate creates a new machine
-func (h *Handler) MachineCreate(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) MachineCreate(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 
 	claims := r.Context().Value("user").(jwt.Token).Claims.(jwt.MapClaims)
 	quotas, ok := claims["machine_quota"].(map[string]int)
