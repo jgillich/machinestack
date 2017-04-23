@@ -9,10 +9,6 @@ variables:
   POSTGRES_USER: test
   POSTGRES_PASSWORD: test
 
-cache:
-  paths:
-    - vendor/
-
 before_script:
   - ln -s /builds /go/src/gitlab.com
   - cd /go/src/gitlab.com/faststack/machinestack
@@ -29,7 +25,10 @@ dep:
     - dep ensure
   artifacts:
     paths:
-      - vendor/
+      - vendor
+  cache:
+    paths:
+      - vendor
 
 lint:
   stage: test
