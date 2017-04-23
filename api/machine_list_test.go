@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 	"net/http/httptest"
+	"reflect"
 	"testing"
 
 	jwt "github.com/dgrijalva/jwt-go"
@@ -38,13 +39,17 @@ func TestMachineList(t *testing.T) {
 		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusOK)
 	}
 
-	var machines []*model.Machine
-	if err := jsonapi.UnmarshalPayload(rr.Body, machines); err != nil {
+	machines, err := jsonapi.UnmarshalManyPayload(rr.Body, reflect.TypeOf(new(model.Machine)))
+	if err != nil {
 		t.Fatal(err)
 	}
 
 	found := false
-	for _, m := range machines {
+	for _, mm := range machines {
+		m, ok := mm.(*model.Machine)
+		if !ok {
+			t.Errorf("returned model is not machine: '%v'", mm)
+		}
 		if m.Name == machine.Name {
 			found = true
 			break
