@@ -1,6 +1,8 @@
 package client
 
 import (
+	"strings"
+
 	"github.com/gorilla/websocket"
 	"gitlab.com/faststack/machinestack/driver"
 )
@@ -8,7 +10,7 @@ import (
 // SessionControl returns a control message channel for a session
 func (c *Client) SessionControl(sessionID string) (chan driver.ControlMessage, error) {
 	dialer := websocket.Dialer{}
-	conn, _, err := dialer.Dial(c.url+"/session/"+sessionID+"/control", nil)
+	conn, _, err := dialer.Dial(strings.Replace(c.url, "http", "ws", 1)+"/session/"+sessionID+"/control", nil)
 	if err != nil {
 		return nil, err
 	}
