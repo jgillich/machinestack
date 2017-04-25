@@ -9,6 +9,7 @@ import (
 	"gitlab.com/faststack/machinestack/model"
 
 	jwt "github.com/dgrijalva/jwt-go"
+	jwtmiddleware "github.com/jgillich/jwt-middleware"
 	"github.com/julienschmidt/httprouter"
 )
 
@@ -31,7 +32,7 @@ func TestMachineDelete(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	*r = *r.WithContext(context.WithValue(r.Context(), UserContextKey, testToken))
+	*r = *r.WithContext(context.WithValue(r.Context(), jwtmiddleware.TokenContextKey{}, testToken))
 
 	rr := httptest.NewRecorder()
 	router := httprouter.New()

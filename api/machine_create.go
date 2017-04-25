@@ -60,8 +60,7 @@ func (h *Handler) MachineCreate(w http.ResponseWriter, r *http.Request, params h
 		return
 	}
 
-	_, err := govalidator.ValidateStruct(machine)
-	if err != nil {
+	if _, err := govalidator.ValidateStruct(machine); err != nil {
 		e := *ValidationFailedError
 		e.Detail = err.Error()
 		WriteOneError(w, http.StatusBadRequest, &e)
