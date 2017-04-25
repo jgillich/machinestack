@@ -1,5 +1,6 @@
 language: go
 go: master
+go_import_path: gitlab.com/faststack/machinestack
 dist: trusty
 sudo: required
 before_install:
