@@ -9,7 +9,7 @@ import (
 )
 
 func (c *Client) SessionCreate(machineName string) (string, error) {
-	r, err := c.request("POST", "/machines"+machineName+"/session", nil)
+	r, err := c.request("POST", "/machines/"+machineName+"/session", nil)
 	if err != nil {
 		return "", err
 	}
