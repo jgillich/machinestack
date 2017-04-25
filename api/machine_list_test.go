@@ -19,7 +19,7 @@ func TestMachineList(t *testing.T) {
 		Name:   "TestMachineList",
 		Image:  "ubuntu/trusty",
 		Driver: "lxd",
-		UserID: testToken.Claims.(jwt.MapClaims)["id"].(int64),
+		UserID: int64(testToken.Claims.(jwt.MapClaims)["id"].(float64)),
 	}
 	if err := testDB.Insert(&machine); err != nil {
 		t.Fatal(err)
