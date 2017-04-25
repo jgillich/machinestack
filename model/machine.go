@@ -6,6 +6,6 @@ type Machine struct {
 	Name   string `jsonapi:"attr,name" valid:"printableascii,length(4|50),required"`
 	Image  string `jsonapi:"attr,image" valid:"printableascii,length(4|50),required"`
 	Driver string `jsonapi:"attr,driver" valid:"alpha,required"`
-	UserID int    `jsonapi:"attr,user_id"`
+	UserID int64  `jsonapi:"attr,user_id"`
 	Node   string
 }

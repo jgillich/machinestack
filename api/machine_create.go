@@ -88,7 +88,7 @@ func (h *Handler) MachineCreate(w http.ResponseWriter, r *http.Request, params h
 	}
 
 	machine.Node = node
-	machine.UserID = claims["id"].(int)
+	machine.UserID = int64(claims["id"].(float64))
 
 	if err = h.DB.Insert(&machine); err != nil {
 		WriteInternalError(w, "machine create: db error", err)
@@ -98,5 +98,5 @@ func (h *Handler) MachineCreate(w http.ResponseWriter, r *http.Request, params h
 		return
 	}
 
-	w.WriteHeader(http.StatusCreated)
+	WriteOne(w, http.StatusCreated, machine)
 }
