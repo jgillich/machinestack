@@ -49,8 +49,8 @@ func (h *Handler) SessionCreate(w http.ResponseWriter, r *http.Request, params h
 		return
 	}
 
-	if machine.UserID != claims["name"] {
-		WriteOneError(w, http.StatusUnauthorized, AccessDeniedError)
+	if machine.UserID != int64(claims["id"].(float64)) {
+		WriteOneError(w, http.StatusForbidden, AccessDeniedError)
 		return
 	}
 
@@ -72,6 +72,6 @@ func (h *Handler) SessionCreate(w http.ResponseWriter, r *http.Request, params h
 		created: time.Now(),
 	}
 
-	WriteOne(w, http.StatusCreated, SessionCreateResponse{ID: id})
+	WriteOne(w, http.StatusCreated, &SessionCreateResponse{ID: id})
 	return
 }
