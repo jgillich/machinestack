@@ -39,14 +39,18 @@ func (h *Handler) MachineCreate(w http.ResponseWriter, r *http.Request, params h
 		return
 	}
 
-	quotas, ok := claims["machine_quota"].(map[string]int)
+	quotas := make(map[string]int)
 
-	if !ok {
-		WriteInternalError(w, "machine create: invalid machine_quota format", errors.New(""))
-		return
+	for _, k := range []string{"instances", "cpu", "ram"} {
+		if _, ok := claims["machine_quota"]; !ok {
+			WriteInternalError(w, "machine create: missing machine_quota", errors.New(""))
+			return
+		}
+
+		quotas[k] = int(claims["machine_quota"].(map[string]interface{})[k].(float64))
 	}
 
-	if count, err := h.DB.Model(&model.Machine{}).Where("user_id = ?", claims["name"]).Count(); err != nil {
+	if count, err := h.DB.Model(&model.Machine{}).Where("user_id = ?", claims["id"]).Count(); err != nil {
 		WriteInternalError(w, "machine create: db error", err)
 		return
 	} else if count >= quotas["instances"] {

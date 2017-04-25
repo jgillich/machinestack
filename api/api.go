@@ -63,21 +63,6 @@ type Handler struct {
 	AllowOrigins []string
 }
 
-// JwtClaims are the custom claims we use
-type JwtClaims struct {
-	Name         string       `json:"name"`
-	Email        string       `json:"email"`
-	MachineQuota MachineQuota `json:"machine_quota"`
-	jwt.StandardClaims
-}
-
-// MachineQuota defines limits for a user
-type MachineQuota struct {
-	Instances int `json:"instances"`
-	CPU       int `json:"cpu"`
-	RAM       int `json:"ram"`
-}
-
 // WriteOneError returns one error object
 func WriteOneError(w http.ResponseWriter, status int, err *jsonapi.ErrorObject) {
 	w.Header().Set("Content-Type", jsonapi.MediaType)

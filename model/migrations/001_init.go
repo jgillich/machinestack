@@ -15,7 +15,7 @@ func init() {
 				name text,
 				image text,
 				driver text,
-				user_id text,
+				user_id bigserial,
 				node text,
 				PRIMARY KEY (id)
 			)
