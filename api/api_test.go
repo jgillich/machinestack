@@ -14,7 +14,7 @@ import (
 )
 
 var (
-	testToken = jwt.Token{Claims: jwt.MapClaims{
+	testToken = &jwt.Token{Claims: jwt.MapClaims{
 		"id":            1,
 		"machine_quota": map[string]int{"instances": 10, "cpu": 1, "ram": 1},
 	}}
