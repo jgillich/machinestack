@@ -5,10 +5,6 @@
 
 [[dependencies]]
   branch = "master"
-  name = "github.com/auth0/go-jwt-middleware"
-
-[[dependencies]]
-  branch = "master"
   name = "github.com/dchest/uniuri"
 
 [[dependencies]]
@@ -42,6 +38,10 @@
 [[dependencies]]
   branch = "master"
   name = "github.com/hashicorp/hcl"
+
+[[dependencies]]
+  branch = "master"
+  name = "github.com/jgillich/jwt-middleware"
 
 [[dependencies]]
   branch = "master"

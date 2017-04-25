@@ -1,4 +1,4 @@
-memo = "f362492c3b0fa2bf177c90b47214a00cf3531f0b558f33a7b5964981218f45cd"
+memo = "a9eab5366a24ba1dc358d2d09a3f231069957c0b1dceb8ff88f8b608827fa9e4"
 
 [[projects]]
   branch = "master"
@@ -7,22 +7,16 @@ memo = "f362492c3b0fa2bf177c90b47214a00cf3531f0b558f33a7b5964981218f45cd"
   revision = "4239b77079c7b5d1243b7b4736304ce8ddb6f0f2"
 
 [[projects]]
-  branch = "master"
   name = "github.com/asaskevich/govalidator"
   packages = ["."]
-  revision = "872bb01704d183fe276bce6fa429408a87661998"
-
-[[projects]]
-  branch = "master"
-  name = "github.com/auth0/go-jwt-middleware"
-  packages = ["."]
-  revision = "f3f7de3b9e394e3af3b88e1b9457f6f71d1ae0ac"
+  revision = "4918b99a7cb949bb295f3c7bbaf24b577d806e35"
+  version = "v6"
 
 [[projects]]
   branch = "master"
   name = "github.com/bgentry/speakeasy"
   packages = ["."]
-  revision = "675b82c74c0ed12283ee81ba8a534c8982c07b85"
+  revision = "4aabc24848ce5fd31929f7d1e4ea74d3709c14cd"
 
 [[projects]]
   name = "github.com/davecgh/go-spew"
@@ -43,16 +37,16 @@ memo = "f362492c3b0fa2bf177c90b47214a00cf3531f0b558f33a7b5964981218f45cd"
   revision = "2268707a8f0843315e2004ee4f1d021dc08baedf"
 
 [[projects]]
-  branch = "master"
   name = "github.com/go-pg/migrations"
   packages = ["."]
   revision = "327e262afb5c632d5aada01953c4307943cb2180"
+  version = "v6.0.2"
 
 [[projects]]
-  branch = "master"
   name = "github.com/go-pg/pg"
   packages = [".","internal","internal/parser","internal/pool","orm","types"]
-  revision = "b80ead78e706aae155d29d808f0df17fccd8eea2"
+  revision = "fe3699c336cb7dbd24dca8ed9e0f1f3447f6b0f1"
+  version = "v6.1.0"
 
 [[projects]]
   branch = "master"
@@ -62,21 +56,15 @@ memo = "f362492c3b0fa2bf177c90b47214a00cf3531f0b558f33a7b5964981218f45cd"
 
 [[projects]]
   branch = "master"
-  name = "github.com/gorilla/context"
-  packages = ["."]
-  revision = "08b5f424b9271eedf6f9f0ce86cb9396ed337a42"
-
-[[projects]]
-  branch = "master"
   name = "github.com/gorilla/websocket"
   packages = ["."]
-  revision = "3f3e394da2b801fbe732a935ef40724762a67a07"
+  revision = "a91eba7f97777409bc2c443f5534d41dd20c5720"
 
 [[projects]]
   branch = "master"
   name = "github.com/hashicorp/consul"
   packages = ["api"]
-  revision = "22986fbfe899698b534861a012c50ce128c2b713"
+  revision = "5ae2829e17cebee0f5a8f5f4f6514fe38712015a"
 
 [[projects]]
   branch = "master"
@@ -98,15 +86,27 @@ memo = "f362492c3b0fa2bf177c90b47214a00cf3531f0b558f33a7b5964981218f45cd"
 
 [[projects]]
   branch = "master"
+  name = "github.com/hashicorp/go-rootcerts"
+  packages = ["."]
+  revision = "6bb64b370b90e7ef1fa532be9e591a81c3493e00"
+
+[[projects]]
+  branch = "master"
   name = "github.com/hashicorp/hcl"
   packages = [".","hcl/ast","hcl/parser","hcl/scanner","hcl/strconv","hcl/token","json/parser","json/scanner","json/token"]
-  revision = "630949a3c5fa3c613328e1b8256052cbc2327c9b"
+  revision = "7fa7fff964d035e8a162cce3a164b3ad02ad651b"
 
 [[projects]]
   name = "github.com/hashicorp/serf"
   packages = ["coordinate"]
   revision = "d6574a5bb1226678d7010325fb6c985db20ee458"
   version = "v0.8.1"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/jgillich/jwt-middleware"
+  packages = ["."]
+  revision = "ba9bf3dd0bd3967611f04d800d4d65beeae44ccf"
 
 [[projects]]
   branch = "master"
@@ -129,26 +129,32 @@ memo = "f362492c3b0fa2bf177c90b47214a00cf3531f0b558f33a7b5964981218f45cd"
 [[projects]]
   branch = "master"
   name = "github.com/lxc/lxd"
-  packages = [".","shared","shared/api","shared/ioprogress","shared/osarch","shared/simplestreams","shared/version"]
-  revision = "2e26a18c0b8666257dca9a91a9c789251914adde"
+  packages = [".","shared","shared/api","shared/ioprogress","shared/logger","shared/osarch","shared/simplestreams","shared/version"]
+  revision = "4650ca38dba533800ba742954e104323062073c6"
 
 [[projects]]
-  branch = "master"
   name = "github.com/mattn/go-isatty"
   packages = ["."]
-  revision = "dda3de49cbfcec471bd7a70e6cc01fcc3ff90109"
+  revision = "fc9e8d8ef48496124e79ae0df75490096eccf6fe"
+  version = "v0.0.2"
 
 [[projects]]
   branch = "master"
   name = "github.com/mitchellh/cli"
   packages = ["."]
-  revision = "8d6d9ab3c912dcb005ece87c40a41b9e73e1999a"
+  revision = "ee8578a9c12a5bb9d55303b9665cc448772c81b8"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/mitchellh/go-homedir"
+  packages = ["."]
+  revision = "b8bc1bf767474819792c23f32d8286a45736f1c6"
 
 [[projects]]
   branch = "master"
   name = "github.com/mitchellh/mapstructure"
   packages = ["."]
-  revision = "53818660ed4955e899c0bcafa97299a388bd7c8e"
+  revision = "cc8532a8e9a55ea36402aa21efdf403a60d34096"
 
 [[projects]]
   name = "github.com/pmezard/go-difflib"
@@ -160,13 +166,13 @@ memo = "f362492c3b0fa2bf177c90b47214a00cf3531f0b558f33a7b5964981218f45cd"
   branch = "master"
   name = "github.com/rs/cors"
   packages = ["."]
-  revision = "a62a804a8a009876ca59105f7899938a1349f4b3"
+  revision = "2d7dd2a10331137ae3f931ba08c21fd00cbf208d"
 
 [[projects]]
-  branch = "master"
   name = "github.com/rs/xhandler"
   packages = ["."]
-  revision = "ed27b6fd65218132ee50cd95f38474a3d8a2cd12"
+  revision = "d9d9599b6aaf6a058cb7b1f48291ded2cbd13390"
+  version = "v1.0"
 
 [[projects]]
   branch = "master"
@@ -181,31 +187,31 @@ memo = "f362492c3b0fa2bf177c90b47214a00cf3531f0b558f33a7b5964981218f45cd"
   revision = "c0db5feaa33826cd5117930c8f4ee5c0f565eec6"
 
 [[projects]]
-  branch = "master"
   name = "go.uber.org/atomic"
   packages = ["."]
   revision = "4e336646b2ef9fc6e47be8e21594178f98e5ebcf"
+  version = "v1.2.0"
 
 [[projects]]
   branch = "master"
   name = "go.uber.org/zap"
   packages = [".","buffer","internal/bufferpool","internal/color","internal/exit","internal/multierror","zapcore"]
-  revision = "1550bc05539134bbf8612a35f34a79ab8bf34ee3"
+  revision = "bb5f9d518b7dce3474db51e00f41cd8391a41121"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/net"
   packages = ["context"]
-  revision = "906cda9512f77671ab44f8c8563b13a8e707b230"
+  revision = "da118f7b8e5954f39d0d2130ab35d4bf0e3cb344"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
-  revision = "e4594059fe4cde2daf423055a596c2cd1e6c9adf"
+  revision = "9f30dcbe5be197894515a338a9bda9253567ea8f"
 
 [[projects]]
   branch = "v2"
   name = "gopkg.in/yaml.v2"
   packages = ["."]
-  revision = "a3f3340b5840cee44f372bddb5880fcbc419b46a"
+  revision = "cd8b52f8269e0feb286dfeef29f8fe4d5b397e0b"

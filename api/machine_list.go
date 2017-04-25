@@ -3,7 +3,7 @@ package api
 import (
 	"net/http"
 
-	jwt "github.com/dgrijalva/jwt-go"
+	jwtmiddleware "github.com/jgillich/jwt-middleware"
 	"github.com/julienschmidt/httprouter"
 
 	"gitlab.com/faststack/machinestack/model"
@@ -11,7 +11,11 @@ import (
 
 // MachineList lists all machines of a user
 func (h *Handler) MachineList(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	claims := r.Context().Value("user").(jwt.Token).Claims.(jwt.MapClaims)
+	claims, err := jwtmiddleware.ContextClaims(r)
+	if err != nil {
+		WriteOneError(w, http.StatusUnauthorized, UnauthorizedError)
+		return
+	}
 
 	var machines []*model.Machine
 	if err := h.DB.Model(&machines).Where("user_id = ?", claims["id"]).Select(); err != nil {

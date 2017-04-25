@@ -3,8 +3,8 @@ package api
 import (
 	"net/http"
 
-	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/go-pg/pg"
+	jwtmiddleware "github.com/jgillich/jwt-middleware"
 	"github.com/julienschmidt/httprouter"
 	"gitlab.com/faststack/machinestack/model"
 )
@@ -12,7 +12,12 @@ import (
 // MachineDelete deletes a machine
 func (h *Handler) MachineDelete(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	name := params.ByName("name")
-	claims := r.Context().Value("user").(jwt.Token).Claims.(jwt.MapClaims)
+
+	claims, err := jwtmiddleware.ContextClaims(r)
+	if err != nil {
+		WriteOneError(w, http.StatusUnauthorized, UnauthorizedError)
+		return
+	}
 
 	var machine model.Machine
 	if err := h.DB.Model(&machine).Where("name = ?", name).Select(); err != nil {

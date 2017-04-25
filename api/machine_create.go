@@ -8,7 +8,7 @@ import (
 	"go.uber.org/zap"
 
 	"github.com/asaskevich/govalidator"
-	jwt "github.com/dgrijalva/jwt-go"
+	jwtmiddleware "github.com/jgillich/jwt-middleware"
 	"github.com/julienschmidt/httprouter"
 
 	"github.com/google/jsonapi"
@@ -33,8 +33,12 @@ var (
 
 // MachineCreate creates a new machine
 func (h *Handler) MachineCreate(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+	claims, err := jwtmiddleware.ContextClaims(r)
+	if err != nil {
+		WriteOneError(w, http.StatusUnauthorized, UnauthorizedError)
+		return
+	}
 
-	claims := r.Context().Value("user").(jwt.Token).Claims.(jwt.MapClaims)
 	quotas, ok := claims["machine_quota"].(map[string]int)
 
 	if !ok {

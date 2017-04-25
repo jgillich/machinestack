@@ -5,10 +5,10 @@ import (
 
 	"gitlab.com/faststack/machinestack/scheduler"
 
-	jwtmiddleware "github.com/auth0/go-jwt-middleware"
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/go-pg/pg"
 	"github.com/google/jsonapi"
+	"github.com/jgillich/jwt-middleware"
 	"github.com/julienschmidt/httprouter"
 	"github.com/rs/cors"
 	"github.com/urfave/negroni"
@@ -16,8 +16,6 @@ import (
 )
 
 var (
-	// UserContextKey is the context key for the jwt middleware
-	UserContextKey = "user"
 	// BadRequestError for badly formatted requests
 	BadRequestError = &jsonapi.ErrorObject{
 		Code:   "bad_request",
@@ -35,6 +33,12 @@ var (
 		Code:   "not_found",
 		Title:  "Resource was not found",
 		Detail: "The resource you requested does not exist",
+	}
+	// UnauthorizedError is returned when request is not authenticated
+	UnauthorizedError = &jsonapi.ErrorObject{
+		Code:   "unauthorized",
+		Title:  "Unauthorized",
+		Detail: "The request lacks valid authentication credentials.",
 	}
 	// AccessDeniedError is returned when rqeuested action is not allowed
 	AccessDeniedError = &jsonapi.ErrorObject{
@@ -138,7 +142,6 @@ func (h *Handler) Serve(addr string) error {
 		},
 		SigningMethod:       jwt.SigningMethodHS256,
 		CredentialsOptional: true,
-		UserProperty:        UserContextKey,
 	})
 	middleware.Use(negroni.HandlerFunc(jwt.HandlerWithNext))
 
