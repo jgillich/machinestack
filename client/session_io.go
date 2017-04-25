@@ -2,6 +2,7 @@ package client
 
 import (
 	"io"
+	"strings"
 
 	"github.com/gorilla/websocket"
 )
@@ -9,7 +10,7 @@ import (
 // SessionIO transmits input and output for a session
 func (c *Client) SessionIO(sessionID string, r io.ReadCloser, w io.WriteCloser) error {
 	dialer := websocket.Dialer{}
-	conn, _, err := dialer.Dial(c.url+"/session/"+sessionID+"/io", nil)
+	conn, _, err := dialer.Dial(strings.Replace(c.url, "http", "ws", 1)+"/session/"+sessionID+"/io", nil)
 	if err != nil {
 		return err
 	}
