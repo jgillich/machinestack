@@ -18,7 +18,7 @@ func TestMachineDelete(t *testing.T) {
 		Name:   "TestMachineDelete",
 		Image:  "ubuntu/trusty",
 		Driver: "lxd",
-		UserID: testToken.Claims.(jwt.MapClaims)["id"].(int64),
+		UserID: int64(testToken.Claims.(jwt.MapClaims)["id"].(float64)),
 		Node:   "node",
 	}
 
