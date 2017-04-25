@@ -15,7 +15,7 @@ import (
 
 var (
 	testToken = &jwt.Token{Claims: jwt.MapClaims{
-		"id":            1,
+		"id":            float64(1),
 		"machine_quota": map[string]interface{}{"instances": float64(10), "cpu": float64(1), "ram": float64(1)},
 	}}
 	testScheduler, _ = scheduler.NewMockScheduler(nil)
