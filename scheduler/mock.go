@@ -49,7 +49,7 @@ func (s *MockScheduler) Delete(name, driverName, node string) error {
 	return nil
 }
 
-// Exec creates an new exec session
-func (s *MockScheduler) Exec(name, driverName, node string, stdin io.ReadCloser, stdout io.WriteCloser, control chan driver.ControlMessage) error {
+// Session creates an new exec session
+func (s *MockScheduler) Session(name, driverName, node string, stdin io.ReadCloser, stdout io.WriteCloser, control chan driver.ControlMessage, width, height int) error {
 	return errors.New("not implemented")
 }

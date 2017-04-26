@@ -107,8 +107,8 @@ func (d *LxdDriver) Delete(name string) error {
 	return nil
 }
 
-// Exec creates a new exec session
-func (d *LxdDriver) Exec(name string, stdin io.ReadCloser, stdout io.WriteCloser, control chan ControlMessage) error {
+// Session creates a new exec session
+func (d *LxdDriver) Session(name string, stdin io.ReadCloser, stdout io.WriteCloser, control chan ControlMessage, width, height int) error {
 
 	container, err := d.client.ContainerInfo(name)
 	if err != nil {
@@ -133,7 +133,7 @@ func (d *LxdDriver) Exec(name string, stdin io.ReadCloser, stdout io.WriteCloser
 
 	go func() {
 		// TODO exec unfortunately blocks, so we cannot receive the error
-		_, err = d.client.Exec(name, []string{"/bin/bash"}, nil, stdin, stdout, nil, controlHandlerWrapper, 80, 25)
+		_, err = d.client.Exec(name, []string{"/bin/bash"}, env, stdin, stdout, nil, controlHandlerWrapper, width, height)
 		if err != nil {
 			panic(err)
 		}

@@ -12,7 +12,7 @@ import (
 type Scheduler interface {
 	Create(name, image, driverName string, attrs driver.MachineAttributes) (string, error)
 	Delete(name, driverName, node string) error
-	Exec(name, driverName, node string, stdin io.ReadCloser, stdout io.WriteCloser, control chan driver.ControlMessage) error
+	Session(name, driverName, node string, stdin io.ReadCloser, stdout io.WriteCloser, control chan driver.ControlMessage, width, height int) error
 }
 
 // NewScheduler creates a new Scheduler

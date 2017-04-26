@@ -7,6 +7,7 @@ import (
 
 	"github.com/dchest/uniuri"
 	"github.com/go-pg/pg"
+	"github.com/google/jsonapi"
 	jwtmiddleware "github.com/jgillich/jwt-middleware"
 	"github.com/julienschmidt/httprouter"
 	"gitlab.com/faststack/machinestack/driver"
@@ -24,23 +25,34 @@ type exec struct {
 	created time.Time
 }
 
-// SessionCreateResponse defines the data structure of a ExecCreate response
+// SessionCreateRequest defines the data structure of a SessionCreate request
+type SessionCreateRequest struct {
+	Name   string `jsonapi:"attr,name"`
+	Width  int    `jsonapi:"attr,width"`
+	Height int    `jsonapi:"attr,height"`
+}
+
+// SessionCreateResponse defines the data structure of a SessionCreate response
 type SessionCreateResponse struct {
 	ID string `jsonapi:"primary,sessions"`
 }
 
 // SessionCreate creates a new exec session
 func (h *Handler) SessionCreate(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
-	name := params.ByName("name")
-
 	claims, err := jwtmiddleware.ContextClaims(r)
 	if err != nil {
 		WriteOneError(w, http.StatusUnauthorized, UnauthorizedError)
 		return
 	}
 
+	create := new(SessionCreateRequest)
+	if err := jsonapi.UnmarshalPayload(r.Body, create); err != nil {
+		WriteOneError(w, http.StatusBadRequest, BadRequestError)
+		return
+	}
+
 	var machine model.Machine
-	if err := h.DB.Model(&machine).Where("name = ?", name).Select(); err != nil {
+	if err := h.DB.Model(&machine).Where("name = ?", create.Name).Select(); err != nil {
 		if err != pg.ErrNoRows {
 			WriteInternalError(w, "session create: db error", err)
 			return
@@ -58,7 +70,7 @@ func (h *Handler) SessionCreate(w http.ResponseWriter, r *http.Request, params h
 	outr, outw := io.Pipe()
 	control := make(chan driver.ControlMessage)
 
-	if err := h.Scheduler.Exec(machine.Name, machine.Driver, machine.Node, inr, outw, control); err != nil {
+	if err := h.Scheduler.Session(machine.Name, machine.Driver, machine.Node, inr, outw, control, create.Width, create.Height); err != nil {
 		WriteInternalError(w, "session create: scheduler exec eror", err)
 		return
 	}

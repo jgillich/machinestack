@@ -1,6 +1,8 @@
 package client
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 
 	"gitlab.com/faststack/machinestack/api"
@@ -8,8 +10,19 @@ import (
 	"github.com/google/jsonapi"
 )
 
-func (c *Client) SessionCreate(machineName string) (string, error) {
-	r, err := c.request("POST", "/machines/"+machineName+"/session", nil)
+// SessionCreate creates a new exec session
+func (c *Client) SessionCreate(machineName string, width, height int) (string, error) {
+	create := api.SessionCreateRequest{Name: machineName, Width: width, Height: height}
+
+	payload, err := jsonapi.MarshalOne(&create)
+	if err != nil {
+		return "", err
+	}
+
+	buf := new(bytes.Buffer)
+	json.NewEncoder(buf).Encode(payload)
+
+	r, err := c.request("POST", "/session", buf)
 	if err != nil {
 		return "", err
 	}

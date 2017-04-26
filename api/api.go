@@ -108,7 +108,7 @@ func (h *Handler) Serve(addr string) error {
 	router.POST("/machines", h.MachineCreate)
 	router.DELETE("/machines/:name", h.MachineDelete)
 	router.GET("/machines/:name", h.MachineInfo)
-	router.POST("/machines/:name/session", h.SessionCreate)
+	router.POST("/session", h.SessionCreate)
 	router.GET("/session/:id/io", h.SessionIO)
 	router.GET("/session/:id/control", h.SessionControl)
 

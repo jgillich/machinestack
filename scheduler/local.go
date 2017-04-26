@@ -48,12 +48,12 @@ func (c *LocalScheduler) Delete(name, driverName, node string) error {
 	return nil
 }
 
-// Exec creates an new exec session
-func (c *LocalScheduler) Exec(name, driverName, node string, stdin io.ReadCloser, stdout io.WriteCloser, control chan driver.ControlMessage) error {
+// Session creates an new exec session
+func (c *LocalScheduler) Session(name, driverName, node string, stdin io.ReadCloser, stdout io.WriteCloser, control chan driver.ControlMessage, width, height int) error {
 	driver, err := driver.NewDriver(driverName, *c.driverOptions)
 	if err != nil {
 		return err
 	}
 
-	return driver.Exec(name, stdin, stdout, control)
+	return driver.Session(name, stdin, stdout, control, width, height)
 }

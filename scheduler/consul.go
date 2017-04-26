@@ -5,10 +5,10 @@ import (
 	"io"
 	"strconv"
 
-	"gitlab.com/faststack/machinestack/config"
-	"gitlab.com/faststack/machinestack/driver"
 	"github.com/hashicorp/consul/api"
 	"github.com/jmcvetta/randutil"
+	"gitlab.com/faststack/machinestack/config"
+	"gitlab.com/faststack/machinestack/driver"
 )
 
 // ConsulScheduler distributes machines among a Consul cluster
@@ -94,8 +94,8 @@ func (c *ConsulScheduler) Delete(name, driverName, nodeID string) error {
 	return nil
 }
 
-// Exec creates an new exec session
-func (c *ConsulScheduler) Exec(name, driverName, nodeID string, stdin io.ReadCloser, stdout io.WriteCloser, control chan driver.ControlMessage) error {
+// Session creates an new exec session
+func (c *ConsulScheduler) Session(name, driverName, nodeID string, stdin io.ReadCloser, stdout io.WriteCloser, control chan driver.ControlMessage, width, height int) error {
 
 	node, _, err := c.catalog.Node(nodeID, nil)
 	if err != nil {
@@ -107,7 +107,7 @@ func (c *ConsulScheduler) Exec(name, driverName, nodeID string, stdin io.ReadClo
 		return err
 	}
 
-	return driver.Exec(name, stdin, stdout, control)
+	return driver.Session(name, stdin, stdout, control, width, height)
 }
 
 func (c *ConsulScheduler) newDriver(name string, node *api.Node) (driver.Driver, error) {
