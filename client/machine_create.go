@@ -9,10 +9,10 @@ import (
 	"gitlab.com/faststack/machinestack/model"
 )
 
-func (c *Client) MachineCreate(machine *model.Machine) error {
+func (c *Client) MachineCreate(machine *model.Machine) (*model.Machine, error) {
 	payload, err := jsonapi.MarshalOne(machine)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	buf := new(bytes.Buffer)
@@ -20,14 +20,18 @@ func (c *Client) MachineCreate(machine *model.Machine) error {
 
 	r, err := c.request("POST", "/machines", buf)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	switch r.StatusCode {
 	case 201:
-		return nil
+		var res model.Machine
+		if err := jsonapi.UnmarshalPayload(r.Body, &res); err != nil {
+			return nil, err
+		}
+		return &res, nil
 	default:
 		// TODO unmarshal error
-		return fmt.Errorf("unexpected response: %s", r.Status)
+		return nil, fmt.Errorf("unexpected response: %s", r.Status)
 	}
 }
