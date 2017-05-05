@@ -113,7 +113,13 @@ func (h *Handler) Serve(addr string) error {
 	router.GET("/session/:id/control", h.SessionControl)
 
 	middleware := negroni.New()
-	// TODO recovery middleware with jsonapi response
+
+	recovery := negroni.NewRecovery()
+	recovery.ErrorHandlerFunc = func(err interface{}) {
+		logger.Error("recovered", zap.Any("reason", err))
+	}
+	middleware.Use(recovery)
+
 	middleware.Use(negroni.NewLogger())
 
 	middleware.Use(cors.New(cors.Options{
@@ -122,6 +128,13 @@ func (h *Handler) Serve(addr string) error {
 	}))
 
 	jwt := jwtmiddleware.New(jwtmiddleware.Options{
+		ErrorHandler: func(w http.ResponseWriter, r *http.Request, err string) {
+			WriteOneError(w, http.StatusUnauthorized, &jsonapi.ErrorObject{
+				Code:   "unauthorized",
+				Title:  "Unauthorized",
+				Detail: err,
+			})
+		},
 		ValidationKeyGetter: func(token *jwt.Token) (interface{}, error) {
 			return h.JWTSecret, nil
 		},

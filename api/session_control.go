@@ -19,8 +19,13 @@ func (h *Handler) SessionControl(w http.ResponseWriter, r *http.Request, params 
 
 	upgrader := websocket.Upgrader{
 		CheckOrigin: func(r *http.Request) bool {
-			// TODO
-			return true
+			origin := r.Header.Get("Origin")
+			for _, o := range h.AllowOrigins {
+				if o == origin || o == "*" {
+					return true
+				}
+			}
+			return false
 		},
 	}
 
