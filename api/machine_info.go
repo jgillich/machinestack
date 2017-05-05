@@ -29,8 +29,8 @@ func (h *Handler) MachineInfo(w http.ResponseWriter, r *http.Request, params htt
 		return
 	}
 
-	if machine.UserID != claims["id"] {
-		WriteOneError(w, http.StatusUnauthorized, AccessDeniedError)
+	if machine.UserID != int64(claims["id"].(float64)) {
+		WriteOneError(w, http.StatusForbidden, AccessDeniedError)
 		return
 	}
 
